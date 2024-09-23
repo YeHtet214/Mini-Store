@@ -28,7 +28,6 @@ export const getAllOrderItems = async () => {
       }
 }
 
-
 export const createNewOrder = async ({ userId, totalAmount }) => {
       const query = `
             INSERT INTO orders (user_id, total_amount, status)
@@ -60,15 +59,31 @@ export const addOrderItems = (orderId, items) => {
       }
 }
 
-export const updateOrderStatus = async (orderId) => {
+export const updateOrderStatus = async (orderId, status) => {
       const query = `
             UPDATE orders SET status = $1
-            WHERE order_id = $2;
+            WHERE order_id = $2 RETURNING *;
       `;
       try {
-            await client.query(query, ["completed", orderId]);
+            const { rows } = await client.query(query, [status, orderId]);
+            console.log("Rows: ", rows);
+            return rows[0];
       } catch (error) {
             console.log(error);
             throw new Error(error);
+      }
+}
+
+export const deleteOrder = async (orderId) => {
+      try {
+            const { rows } = await client.query(`
+                  DELETE FROM orders 
+                  WHERE order_id = $1
+                  Returning order_id
+            `, [orderId]);
+            return rows[0];
+      } catch (err) {
+            console.log(err);
+            throw new Error(err);
       }
 }

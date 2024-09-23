@@ -47,10 +47,19 @@ export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
 export const updateOrderState = async (orderId: number, value: string) => {
       const url = `http://localhost:5000/orders/${orderId}/update`;
       try {
-            const res = await axios.put(url, value);
-            return res;
+            const res = await axios.put(url, { value });
+            return res.data;
       } catch (error) {
             console.log(error);
       }
 }
 
+export const deleteOrder = async (orderId: number) => {
+      const url = `http://localhost:5000/orders/${orderId}/delete`;
+      try {
+            const res = await axios.delete(url);
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
+}

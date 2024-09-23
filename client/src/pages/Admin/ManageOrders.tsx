@@ -32,17 +32,27 @@ import * as OrderServices from "../../services/Order.service";
 import { AdminOrder } from "../../types/types";
 
 const ManageOrders = () => {
-    const  { orders, orderItems, setOrders } = UseOrders();
+    const  { orders, orderItems, updateOrderStatus, deleteOrder } = UseOrders();
     const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+    const [isDeleted, setIsDeleted] = useState<boolean>(false);
 
     const handleOrderExpandtion = (order_id: number) => {
         setExpandedOrder(expandedOrder => expandedOrder === order_id ? null : order_id);
     }
 
     const handleOrderStatusUpdate = async (e: ChangeEvent<HTMLSelectElement>, orderId: number) => {
-        const updatedOrder = await OrderServices.updateOrderState(orderId, e.target.value);
+        const updatedOrder = await OrderServices.updateOrderState(orderId, e.target.value) as AdminOrder;
+        console.log("Updated Status", updatedOrder.status);
         if (!updatedOrder) return;
-        setOrders(orders => [...orders.filter(order => order.order_id !== orderId), updatedOrder])
+        updateOrderStatus(updatedOrder);
+    }
+
+    const handleOrderDelete = async (e: React.MouseEvent<HTMLSpanElement>,orderId: number) => {
+        e.stopPropagation();
+        const deletedOrder = await OrderServices.deleteOrder(orderId);
+        if (!deletedOrder) return;
+        console.log("Deleted Order: ", orderId);
+        deleteOrder(orderId);
     }
 
     return (
@@ -57,10 +67,11 @@ const ManageOrders = () => {
                         <th>Order Date</th>
                         <th>Total Amount</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {orders?.map(order => (
+                <tbody className="relatvie">
+                    { orders?.map(order => (
                         <React.Fragment key={order.order_id}>
                             <tr onClick={() => handleOrderExpandtion(order.order_id)} className="text-left cursor-pointer">
                                 <td>{order.order_id}</td>
@@ -73,6 +84,16 @@ const ManageOrders = () => {
                                         <option value="compeleted">Completed</option>
                                         <option value="pending">Pending</option>
                                     </select>
+                                </td>
+                                <td>
+                                    <button onClick={() => setIsDeleted(true)}>Delete</button>
+                                    { isDeleted && (
+                                        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 p-4 bg-black text-white">
+                                            Are u sure you want to delete this order? 
+                                            <span onClick={(e) => handleOrderDelete(e, order.order_id)}>Yes</span>
+                                            <span onClick={() => setIsDeleted(false)}>No</span>
+                                        </div>
+                                    )}
                                 </td>
                             </tr>
                             <React.Fragment>
@@ -91,7 +112,7 @@ const ManageOrders = () => {
                                                 </thead>
                                                 <tbody>
                                                     { orderItems.filter(item => item.order_id === order.order_id).map(item => (
-                                                        <tr>
+                                                        <tr key={item.order_item_id}>
                                                             <td>{item.order_item_id}</td>
                                                             <td>{item.name}</td>
                                                             <td>{item.price}</td>

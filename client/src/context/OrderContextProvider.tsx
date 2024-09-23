@@ -6,13 +6,17 @@ import { AdminOrder, OrderItemType } from "../types/types";
 interface OrderContextType {
     orders: AdminOrder[] | [];
     setOrders: Dispatch<SetStateAction<AdminOrder[] | []>>;
+    updateOrderStatus: (order: AdminOrder) => void;
+    deleteOrder: (order: number) => void;
     orderItems: OrderItemType[] | [];
 }
 
 const OrderContext = createContext<OrderContextType>({
     orders: [], 
     orderItems: [],
-    setOrders: () => {}
+    setOrders: () => {},
+    updateOrderStatus: () => {},
+    deleteOrder: () => {}
 });
 
 const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -21,9 +25,10 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
     useEffect(() => {
         const getAllOrders = async () => {
-            const allOrders = await OrderServices.getAllOrders();
-            if (allOrders) setOrders(allOrders);
+            const allOrders = await OrderServices.getAllOrders() as AdminOrder[];
+            if (allOrders) setOrders(allOrders.sort((a, b) => a.order_id - b.order_id));
         }
+        
         const getAllOrderItems = async () => {
             const allOrderItems = await OrderServices.getAllOrderItems();
             if (allOrderItems) setOrderItems(allOrderItems);
@@ -32,8 +37,23 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         getAllOrderItems();
     }, []);
 
+    const updateOrderStatus = (updatedOrder: AdminOrder) => {
+        setOrders(prevOrders => 
+            [...prevOrders.filter(order => order.order_id !== updatedOrder.order_id), updatedOrder]
+            .sort((a, b) => a.order_id - b.order_id)
+        )
+    }
+
+    const deleteOrder = (deletedOrderId: number) => {
+        setOrders(prevOrders => 
+            prevOrders
+                .filter(order => order.order_id !== deletedOrderId)
+                .sort((a, b) => a.order_id - b.order_id)
+        )
+    }
+
     return (
-        <OrderContext.Provider value={{ orders, setOrders, orderItems }}>
+        <OrderContext.Provider value={{ orders, setOrders, orderItems, updateOrderStatus, deleteOrder }}>
             {children}
         </OrderContext.Provider>
     )

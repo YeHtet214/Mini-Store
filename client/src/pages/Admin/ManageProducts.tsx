@@ -153,6 +153,8 @@ const ManageProducts = () => {
         formData.append("image", newProduct.image);
         formData.append("description", newProduct.description);
 
+        console.info("Product Form Data: ", formData);
+
         await ProductServices.uploadNewProduct(formData); // Upload New Product into the Database
         setNewProduct({name: "", category: "", price: 0, stock: 0, image: null, description: "" }); // set to initial state [empty the input value]
     }

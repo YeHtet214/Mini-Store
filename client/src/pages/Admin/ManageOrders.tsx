@@ -51,8 +51,8 @@ const ManageOrders = () => {
         e.stopPropagation();
         const deletedOrder = await OrderServices.deleteOrder(orderId);
         if (!deletedOrder) return;
-        console.log("Deleted Order: ", orderId);
         deleteOrder(orderId);
+        setIsDeleted(false);
     }
 
     return (

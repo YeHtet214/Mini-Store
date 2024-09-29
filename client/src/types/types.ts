@@ -50,9 +50,10 @@ export interface OrderItemType {
 }
 
 export interface User {
-      user_id: number | undefined;
+      user_id?: number | undefined;
       name?: string;
       email?: string;
+      role?: string;
       password?: string;
       token?: string | null;
 }
@@ -62,7 +63,7 @@ export type authType = 'login' | 'register';
 export interface userInfo {
       name?: string;
       email: string;
-      enterPassword: string;
+      password: string;
 }
 
 export interface authData {

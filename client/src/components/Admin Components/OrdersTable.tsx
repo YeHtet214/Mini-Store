@@ -37,7 +37,7 @@ const OrdersTable = () => {
                                 { expandedOrder === order.order_id && (
                                     <tr className="border border-red-50">
                                         <td colSpan={6} className="border">
-                                            <table className="w-full border-spacing-x-8">
+                                            <table className="w-full">
                                                 <thead>
                                                     <tr className="text-left">
                                                         <th>Order Item Id</th>

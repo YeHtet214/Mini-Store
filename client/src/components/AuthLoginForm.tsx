@@ -4,12 +4,6 @@ import * as UserServices from "../services/User.service";
 import { useUser } from "../context/UserContextProvider";
 import { AuthResponse, userInfo } from "../types/types";
 
-// interface FormProps {
-//       authType: authType;
-// }
-
-const authType = "register";
-
 const Form = () => {
       const [userInput, setUserInput] = useState<userInfo>({ name: '', email: '', password: ''});
       const [error, setError] = useState<string>('');
@@ -35,7 +29,7 @@ const Form = () => {
             e.preventDefault();
             console.log("LOgin data: ", userInput);
 
-            const isAuthenticate = await UserServices.authenticateUser({userInput , authType, handleResponse});
+            const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
             if (isAuthenticate) {
                   setIsLoggedIn(true);
                   UserServices.getCurrentUser().then(data => setCurrentUser(data));
@@ -50,11 +44,7 @@ const Form = () => {
 
       return (
             <form className="p-4 shadow-md rounded my-4" onSubmit={handleSubmit}>
-                  <h2 className="mb-4">Register</h2>
-                  <div className={`flex items-center gap-3 `}>
-                        <label htmlFor="name" className="w-24">Name</label>
-                        <input value={userInput.name} type="text" id="name" name="name" placeholder="Jhon Smith" className="outline-none border-b-2 border-gray-600 rounded p-2 mb-2" required onChange={handleChange} />
-                  </div>
+                <h2 className="mb-4">Login Your Account</h2> : 
                   <div className="flex items-center gap-3">
                         <label htmlFor="email" className="w-24">Email</label>
                         <input value={userInput.email} type="text" id="email" name="email" placeholder="example@gmail.com" className="outline-none border-b-2 border-gray-600 rounded p-2 mb-2" required onChange={handleChange} />
@@ -65,7 +55,7 @@ const Form = () => {
                         <input value={userInput.password} type="password" id="password" name="password" placeholder="...." className="outline-none border-b-2 border-gray-600 rounded p-2 mb-2" required onChange={handleChange} />
                         { error === "incorrectPassword" && <span className="text-red-500">Password is Incorrect!</span> }
                   </div>
-                  <button type="submit" className="border-2 border-purple-800 rounded py-1 px-2 mt-4">Register</button> 
+                  <button type="submit" className="border-2 border-purple-800 rounded py-1 px-2 mt-4" >Login</button> :
             </form>
       );
 }

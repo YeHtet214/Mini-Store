@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import Form from "../components/AuthLoginForm";
+import Form from "../components/AuthForm";
 
-const Login = () => {
+const Register = () => {
 
       return (
             <div>
@@ -19,4 +19,4 @@ const Login = () => {
       )
 }
 
-export default Login;
+export default Register;

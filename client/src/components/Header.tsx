@@ -6,7 +6,7 @@ import { useCart } from "../context/CartContextProvider";
 import { hasRole } from "../services/User.service";
 
 const Header = () => {
-      const { isLoggedIn, user } = useUser();
+      const { isLoggedIn, currentUser } = useUser();
       const { totalQtyInCart } = useCart();
       const isAdmin = hasRole("admin");
 
@@ -27,7 +27,7 @@ const Header = () => {
                         isLoggedIn ?
                         <Link to="/auth/profile" className="flex gap-2">
                               <UserIcon className="w-6" />
-                              <h3>{user?.name}</h3>
+                              <h3>{currentUser?.name}</h3>
                         </Link> :
                         <Link to="/auth/login"><h3>Login</h3></Link>
                   }

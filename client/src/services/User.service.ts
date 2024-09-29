@@ -1,10 +1,11 @@
 import axios from "axios";
-import { AuthResponse, authType, userInfo } from "../types/types";
+import { AuthResponse, authType, User, userInfo } from "../types/types";
 import { jwtDecode } from "jwt-decode";
 
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');
 
+      console.log("token: ", token);
       if (token) console.log(jwtDecode(token));
       const axiosInstance = axios.create({
             baseURL: 'http://localhost:5000/auth/user',
@@ -15,6 +16,16 @@ export const getCurrentUser = async () => {
 
       try {
             const res = await axiosInstance.get(`/profile`);
+            console.log("Current User REturn: ", res);
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
+}
+
+export const getAllUsers = async () => {
+      try {
+            const res = await axios.get('http://localhost:5000/auth/users/get');
             return res.data;
       } catch (error) {
             console.log(error);
@@ -35,7 +46,6 @@ export const loginUser = async (data: userInfo) => {
 export const registerUser = async (data: userInfo) => {
       try {
             const res = await axios.post('http://localhost:5000/auth/register', {...data});
-            console.log("Register response data: ", res);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -43,18 +53,20 @@ export const registerUser = async (data: userInfo) => {
 }
 
 interface UserAuthProps {
-      data: userInfo;
-      authType: authType;
+      userInput: userInfo;
+      authType?: authType;
       handleResponse: (response: AuthResponse) => boolean;
 }
 
-export const authenticateUser = async ({data, authType, handleResponse}: UserAuthProps): Promise<boolean> => {
+export const authenticateUser = async ({userInput, authType="login", handleResponse}: UserAuthProps): Promise<boolean> => {
       let response: AuthResponse;
       if (authType === 'login') { // check if the user loggin or register
-            response = await loginUser({...data});
+            response = await loginUser({...userInput});
       } else { // register user
-            response = await registerUser({...data});
+            response = await registerUser({...userInput});
       }
+
+      console.log("Auth Response: ", response);
 
       if (handleResponse(response)) {
             const { token, user_id } = response;
@@ -63,6 +75,25 @@ export const authenticateUser = async ({data, authType, handleResponse}: UserAut
             return true;
       }
       return false;
+}
+
+export const createNewUser = async (user: User) => {
+      try {
+            const res = await axios.post('http://localhost:5000/manageUsers/users/create', user);
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
+}
+
+export const deleteUser = async (userId: number) => {
+      try {
+            const res = await axios.delete(`http://localhost:5000/auth/users/${userId}/delete`);
+            console.log("Delete REturn ", res.data);
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
 }
 
 export const isAuthenticated = () => {

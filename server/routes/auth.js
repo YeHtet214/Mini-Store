@@ -8,9 +8,11 @@ import auth from "../middlewares/auth.js";
 const router = express.Router();
 
 router.post('/login', async (req, res) => {
-    const { email, enterPassword } = req.body;
+    const { email, password } = req.body;
+    console.log(req.body)
     try {
-        const {token, user_id} = await UserService.authenticateUser(email, enterPassword);
+        const {token, user_id} = await UserService.authenticateUser(email, password);
+        console.log("Login result: ", token, user_id)
         return res.json({ token, user_id });
     } catch(err) {
         console.log(err);
@@ -25,9 +27,9 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-    const {name, email, enterPassword} = req.body;
+    const {name, email, password} = req.body;
     try {
-        const { token, user_id } = await UserService.registerUser(name, email, enterPassword);
+        const { token, user_id } = await UserService.registerUser(name, email, password);
         res.json({ token, user_id });
     } catch (error) {
         console.log("There is an error on register");
@@ -41,6 +43,20 @@ router.get("/user/profile", auth, async (req, res) => {
     const { name, email, user_id } = userData;
     return res.send({name, email, user_id});
 });
+
+router.get("/users/get", async (req, res) => {
+    const users = await UserService.getAllUsers();
+    if (!users) return res.sendStatus(401).json({ msg: 'Something Went Wrong Getting Users'});
+    return res.json(users);
+})
+
+router.delete("/users/:userId/delete", async (req, res) => {
+    const userId = req.params.userId;
+    console.log("UID", userId);
+    const deletedUser = await UserService.deleteUser(userId);
+    if (!deletedUser) return res.sendStatus(401).json({ msg: 'Something Went Wrong Deleting User!'});
+    return res.json(deletedUser);
+})
 
 router.post(
     "/google", 
@@ -60,7 +76,8 @@ router.get(
     async (req, res) => {
         const user = req.user;
         try {
-            const { token, user_id } = await UserService.registerUser(user.name, user.email, user.password);
+            const role = user.email === "yhtet1934@gmail.com" ? 'admin' : 'user'; // for initial admin setup
+            const { token, user_id } = await UserService.registerUser(user.name, user.email, user.password, role);
             res.redirect(`http://localhost:5173?token=${token}&user_id=${user_id}`);
         } catch(err) {
             console.log(err);

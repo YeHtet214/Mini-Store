@@ -11,7 +11,7 @@ import CheckOut from "./pages/CheckOut";
 import Dashboard from "./pages/Admin/Dashboard";
 import ManageProducts from "./pages/Admin/ManageProducts";
 import ManageOrders from "./pages/Admin/ManageOrders";
-import ManageUsers from "./pages/Admin/Users";
+import ManageUsers from "./pages/Admin/ManageUsers";
 import SalesOverview from "./pages/Admin/Overview";
 import ProfileRoute from "./routes/ProfileRoute";
 

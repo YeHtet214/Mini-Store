@@ -3,10 +3,10 @@ export interface Product {
       name: string;
       price: number;
       description: string;
-      image: string;
+      image: string | File;
       stock: number;
       category: string;
-      rating: object;   
+      rating: number;   
 }
 
 export interface CartItemType {
@@ -26,18 +26,10 @@ export interface Order {
       order_date: Date;
       user_id: number;
       payment_method: string;
-      status: string;
+      status: 'Pending' | 'Processing' | 'Cancelled' | 'Delivered';
       address: string;
+      name?: string;
       total_amount: number;
-}
-
-export interface AdminOrder {
-      order_id: number;
-      name: string;
-      user_id: string;
-      order_date: Date;
-      total_amount: number;
-      status: string;
 }
 
 export interface OrderItemType {

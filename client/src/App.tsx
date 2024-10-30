@@ -19,7 +19,7 @@ const App = () => {
       return (
             <>
                   <Header />
-                  <div className="px-7 mx-auto lg:px-0 lg:w-5/6 xl:w-4/6">
+                  <div>
                         <Routes>
                               <Route path="/auth/profile" element={<ProfileRoute />} >
                                     <Route index element={<Profile />} />

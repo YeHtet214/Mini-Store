@@ -30,3 +30,7 @@ export function debounce<T extends (...args: any[]) => any>(func: T, delay: numb
       };
   }
   
+export const currency = new Intl.NumberFormat("en-us", {
+      style: "currency",
+      currency: "USD"
+})

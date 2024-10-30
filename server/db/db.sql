@@ -60,6 +60,19 @@ CREATE TABLE "cart_item" (
   "quantity" INT NOT NULL
 );
 
+CREATE TABLE addresses (
+  address_id SERIAL PRIMARY KEY,
+  user_id INT REFERENCES users(user_id),
+  address_line_1 VARCHAR(255) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  state VARCHAR(100),
+  postal_code VARCHAR(20) NOT NULL,
+  country VARCHAR(100) NOT NULL
+);
+
+ALTER TABLE orders 
+ADD COLUMN address_id INT REFERENCES addresses(address_id);
+
 ALTER TABLE "cart" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "cart_item" ADD FOREIGN KEY ("cart_id") REFERENCES "cart" ("id");

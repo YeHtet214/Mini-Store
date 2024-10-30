@@ -20,29 +20,35 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null);
 
 const CartContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-      const { isLoggedIn, user } = useUser();
-      const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+      const { isLoggedIn, currentUser } = useUser();
+      const [cartItems, setCartItems] = useState<CartItemType[]>(() => {
+            const saveCartItems = localStorage.getItem('cartItems');
+            return saveCartItems ? JSON.parse(saveCartItems) : []
+      });
       const [cartId, setCartId] = useState<number | undefined>();
       const [totalQtyInCart, setTotalQtyInCart] = useState<number>(0);
       const [checkOutItems, setCheckOutItems] = useState<CartItemType[]>([]);
 
       useEffect(() => {
-            handleCartItems();
-      }, [isLoggedIn])
+            (async () => {
+                  if (!currentUser?.user_id) return;
+                  if (isLoggedIn) {
+                        const userCartItems = await CartServices.getCartItemsByUserId();
+                        console.log("User Cart Items: ", userCartItems);
+                        setCartItems(userCartItems);
+                  }
+            })();
+      }, [isLoggedIn]);
 
       useEffect(() => {
-            updateTotalQtyInCart();
-      }, [cartItems, isLoggedIn]);
-
-      async function handleCartItems() {
-            if (isLoggedIn) {
-                  if (!user?.user_id) return;
-                  const userCartItems = await CartServices.getCartItemsByUserId();
-                  setCartItems(userCartItems);
+            if (cartItems.length > 0) {
+                  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            } else {
+                  localStorage.removeItem('cartItems');
             }
-      }
+      }, [cartItems])
 
-      async function updateTotalQtyInCart() {
+      useEffect(() => {
             if (cartItems?.length === 0 || !isLoggedIn) {
                   setTotalQtyInCart(0);
                   return;
@@ -50,7 +56,7 @@ const CartContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
             // get the total number cart items from the user cart
             const itemQty = cartItems?.reduce((accumulator, item) => accumulator + item.quantity, 0);
             setTotalQtyInCart(itemQty);
-      }
+      }, [cartItems, isLoggedIn]);
 
       return (
             <CartContext.Provider value={{ cartItems, setCartItems, cartId, setCartId, totalQtyInCart, setTotalQtyInCart, checkOutItems, setCheckOutItems }}>

@@ -1,217 +1,358 @@
-import React, { ChangeEvent, Dispatch, FC, FormEvent, SetStateAction, useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useProduct } from "../../context/ProductContextProvider";
 import { Product } from "../../types/types";
-import { XMarkIcon } from "@heroicons/react/16/solid";
+import { PlusIcon, PencilIcon, TrashIcon, Search, XIcon } from 'lucide-react'
 import * as ProductServices from "../../services/Product.service";
 
+interface InputProductFormProps {
+  type: string;
+  close: () => void;
+  handleProductSubmit: (data: Product | NewProductType) => void;
+  product: Product | null
+}
+
 interface NewProductType {
-    name: string;
-    category: string;
-    price: number;
-    stock: number;
-    image: File | null;
-    description: string;
+  name: string;
+  price: number;
+  description: string;
+  image: string | File;
+  stock: number;
+  category: string;
+  rating: number;
 }
 
-interface ProductTableProps {
-    sortedProducts: Product[] | [];
-    deleteProduct: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    handleProductUpdate: (p: Product) => void;
+const initialNewProduct: NewProductType = { 
+  name: "",
+  price: 0,
+  description: "",
+  image: "",
+  stock: 0,
+  category: "",
+  rating: 0
 }
 
-interface NewProductFormType {
-    addNewProduct: (e: FormEvent) => void;
-    newProduct: NewProductType;
-    setNewProduct: Dispatch<SetStateAction<NewProductType>>;
-    setToggleForm: Dispatch<SetStateAction<boolean>>;
-}
+const InputProductForm = ({ type, close, handleProductSubmit, product }: InputProductFormProps) => {
+  const [ productData, setProductData ] = useState<Product | NewProductType>(() => product || initialNewProduct);
 
-interface UpdateProductFormProps {
-    product: Product;
-    onUpdate: (p: Product) => void;
-}
-
-const ProductTable: FC<ProductTableProps> = ({ sortedProducts, deleteProduct, handleProductUpdate }) => (
-    <table className="border-2 border-pink-50">
-        <thead>
-            <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Id</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sold</th>
-            </tr>
-        </thead>
-        <tbody>
-            { sortedProducts?.map(product => {
-                return (
-                    <tr key={product.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">{product.id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{product.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{product.category}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{product.price}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{product.stock}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{50}</td>
-                        <td><button className="bg-blue-700 text-white py-1 px-2 rounded" onClick={() => handleProductUpdate(product)}>Update</button></td>
-                        <td><button className="border-red-600 border-2 py-1 px-2 rounded" value={product.id} onClick={deleteProduct}>Delete</button></td>
-                    </tr>
-                )
-            })}
-        </tbody>
-    </table>
-)
-
-const NewProductForm = ({ addNewProduct, newProduct, setNewProduct, setToggleForm }: NewProductFormType) => (
-    <form className="relative" onSubmit={addNewProduct}>
-        <h1>Enter Product Data</h1>
-        <XMarkIcon className="w-6 absolute right-4 top-2 cursor-pointer" onClick={() => setToggleForm(false)} />
-        <input type="text" name="name" autoFocus value={newProduct.name} placeholder="Product Name" onChange={(e) => setNewProduct(newProduct => ({...newProduct, name: e.target.value}))} required />
-        <input type="text" name="category" value={newProduct.category} placeholder="Category" onChange={(e) => setNewProduct(newProduct => ({...newProduct, category: e.target.value}))} required />
-        <input type="number" name="price" value={newProduct.price} placeholder="Price" onChange={(e) => setNewProduct(newProduct => ({...newProduct, price: Number(e.target.value)}))} required />
-        <input type="text" name="description" value={newProduct.description} placeholder="Description" onChange={(e) => setNewProduct(newProduct => ({...newProduct, description: e.target.value}))} />
-        <input type="number" name="stock" value={newProduct.stock} placeholder="Stock" onChange={(e) => setNewProduct(newProduct => ({...newProduct, stock: Number(e.target.value)}))} />
-        <input type="file" name="image" accept="image/*" placeholder="Upload Product Image" onChange={(e) => setNewProduct(newProduct => ({...newProduct, image: e.target.files && e.target.files[0]}))} required />
-        <button type="submit">Add</button>
-    </form>
-);
-
-const UpdateProductForm: FC<UpdateProductFormProps> = ({ product, onUpdate }) => {
-    const [updatedProduct, setUpdatedProduct] = useState<Product>(product);
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUpdatedProduct(prev => ({...prev, [name]: value}));
-    }
-
-    const handleSubmit = async () => {
-        onUpdate(updatedProduct);
-        await ProductServices.updateProduct(updatedProduct);
-    }
-
-    return (
-        <form onSubmit={() => handleSubmit()}>
-            <input type="text" value={updatedProduct.name} name="name" onChange={handleChange} />
-            <input type="number" value={updatedProduct.price} name="price" onChange={handleChange} />
-            <input type="number" value={updatedProduct.stock} name="stock" onChange={handleChange} />
-            <input type="text" value={updatedProduct.description} name="description" onChange={handleChange} />
-            <button type="submit">Submit</button>
-        </form>
-    )
-}
-
-const ManageProducts = () => {
-    const { products, setProducts } = useProduct();
-    const [sortedProducts, setSortedProducts] = useState<Product[] | []>([]);
-    const [selectedType, setSelectedType] = useState<string>("name");
-    const [toggleForm, setToggleForm] = useState<boolean>(false);
-    const [newProduct, setNewProduct] = useState<NewProductType>({name: "", category: "", price: 0, stock: 0, image: null, description: "" });
-    const [productToUpdate, setProductToUpdate] = useState<Product | null>(null);
-    const [showUpdateForm, setShowUpdateForm] = useState<boolean>(false);
-    const [error, setError] = useState<string>('');
-
-    useEffect(() => {
-        console.log(sortedProducts);
-        const sortProducts = () => {
-            if (!products) return;
-
-            let sortedResult: Product[] = [...products];
-            switch (selectedType) {
-                case "name":
-                    sortedResult.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-                case "category":
-                    sortedResult.sort((a, b) => a.category.localeCompare(b.category));
-                    break;
-                case "price":
-                    sortedResult.sort((a, b) => a.price - b.price); // Sort by price (lowest to highest)
-                    break;
-                default:
-                    sortedResult = products;
-                    break;
-            }
-            setSortedProducts(sortedResult);
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      const { value, name, type } = e.target;
+      if ( type === "file") { 
+        const files = (e.target as HTMLInputElement).files;
+        if (files && files[0]) {
+          setProductData(prev => ({...prev, image: files[0]}))
         }
-        if (products) sortProducts();
+      } else {
+        setProductData(prev => ({ ...prev, [name]: value }));
+      }
         
-    }, [selectedType, products]);
+  }
 
-    const handleSorting = (event: ChangeEvent<HTMLSelectElement>) => {
-        setSelectedType(event.target.value);
-    }
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      handleProductSubmit(productData);
+      setProductData(initialNewProduct);
+  }
 
-    const handleAddProductSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-
-        if (!newProduct.image) return;
-
-        const formData = new FormData();
-        formData.append("name", newProduct.name);
-        formData.append("category", newProduct.category);
-        formData.append("price", String(newProduct.price));
-        formData.append("stock", String(newProduct.stock));
-        formData.append("image", newProduct.image);
-        formData.append("description", newProduct.description);
-
-        console.info("Product Form Data: ", formData);
-
-        await ProductServices.uploadNewProduct(formData); // Upload New Product into the Database
-        setNewProduct({name: "", category: "", price: 0, stock: 0, image: null, description: "" }); // set to initial state [empty the input value]
-    }
-
-    const handleDeleteProduct = async (e: React.MouseEvent<HTMLButtonElement>) => {
-        const productId = e.target.value;
-
-        const deletedProduct = await ProductServices.deleteProduct(productId);
-        if (deletedProduct.success) {
-            setProducts(products => products?.filter(pro => pro.id !== deletedProduct.id));
-        } else {
-            setError(deletedProduct.message);
-        }
-    }
-
-    const handleProductUpdate = (product: Product) => {
-        setProductToUpdate(product);
-        setShowUpdateForm(true);
-    }
-
-    return (
-        <div className="pb-10 relative">
-            { error && <h1 className="absolute z-10 bg-white top-10 left-10 p-10 shadow-md">{error}</h1> }
-            <div>
-                <h1>Products List</h1>
-                <select name="sort" id="sortProduct" value={selectedType} onChange={handleSorting}>
-                    <option value="name">Name</option>
-                    <option value="category">Category</option>
-                    <option value="price">Price</option>
-                </select>
-            </div>
-            <div className="max-h-[65vh] max-w-[70vw] overflow-y-scroll">
-                <ProductTable sortedProducts={sortedProducts} deleteProduct={handleDeleteProduct} handleProductUpdate={handleProductUpdate} />
-            </div>
-            
-            {/* // Add New Product  */}
-            <button className="border-red-600 border-2 py-1 px-2 rounded" onClick={() => setToggleForm(true)}>Add Product</button>
-            { toggleForm && <NewProductForm addNewProduct={handleAddProductSubmit} newProduct={newProduct} setNewProduct={setNewProduct} setToggleForm={setToggleForm} /> }
-
-            {/* Update the Product */}
-            { showUpdateForm && productToUpdate && (
-                <UpdateProductForm
-                    product={productToUpdate}
-                    onUpdate={(updatedProduct) => {
-                        setProducts(products => products?.map(p => p.id === updatedProduct.id ? updatedProduct : p));
-                        setShowUpdateForm(false);
-                        setProductToUpdate(null);
-                    }}
-                />
-            )}
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-md relative overflow-hidden">
+        <div className="bg-gray-500 p-6">
+          <h2 className="text-2xl font-bold text-white">
+            { type === "Create" 
+                ? <span>Enter New Product Data</span>
+                : <span>Update Product</span>
+            }
+          </h2>
+          <button
+            onClick={close}
+            className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
+            aria-label="Close"
+          >
+            <XIcon size={24} />
+          </button>
         </div>
-    )
+        <form className="p-6 space-y-4 text-left" onSubmit={(e) => handleSubmit(e)}>
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              Product Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={productData.name}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Olive Oil"
+              required={type === "Create" ? true : false}
+            />
+          </div>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+              Price
+            </label>
+            <input
+              type="text"
+              id="price"
+              name="price"
+              value={productData.price}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="$1234"
+              required={type === "Create" ? true : false}
+            />
+          </div>
+          <div>
+            <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
+              Stock
+            </label>
+            <input
+              type="text"
+              id="stock"
+              name="stock"
+              value={productData.stock}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="1324"
+              required={type === "Create" ? true : false}
+            />
+          </div>
+          <div>
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700 mb-1">
+              Image
+            </label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="1324"
+              required={type === "Create" ? true : false}
+            />
+          </div>
+          <div className="flex justify-end mt-6">
+            <button
+              type="button"
+              onClick={close}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 mr-2"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              { type === "Create" ? "Add Product" : "Update"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )   
 }
 
-export default ManageProducts;
+export default function ManageProduct() {
+  const { products, deleteProduct, addNewProduct, updateProduct } = useProduct();
+  const [displayProducts, setDisplayProducts] = useState<Product[] | []>(products);
+  const [sortedProducts, setSortedProducts] = useState<Product[] | []>([]);
+  const [currentProduct, setCurrentProduct] = useState<Product | null>(null)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedType, setSelectedType] = useState<string>("name");
+  const [formType, setFormType] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState<string>('');
 
+useEffect(() => {
+    (() => {
+        if (!products) return;
 
+        let sortedResult: Product[] = [...products];
+        switch (selectedType) {
+            case "name":
+                sortedResult.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case "category":
+                sortedResult.sort((a, b) => a.category.localeCompare(b.category));
+                break;
+            case "price":
+                sortedResult.sort((a, b) => a.price - b.price); // Sort by price (lowest to highest)
+                break;
+            case "id":
+              sortedResult.sort((a, b) => a.id - b.id); // Sort by price (lowest to highest)
+              break;
+            default:
+                sortedResult = products;
+                break;
+        }
+        setSortedProducts(sortedResult);
+        setDisplayProducts(sortedResult);
+    })();
+}, [selectedType, products]);
 
+const handleFilter = (search: string) => {
+  const filteredProducts = sortedProducts.filter(product => {
+    return product.name?.toLowerCase().includes(search.toLocaleLowerCase()) ||
+            String(product.price)?.includes(search.toLowerCase()) ||
+            String(product.id)?.includes(search.toLowerCase()) ? product : null
+  });
+  setDisplayProducts(filteredProducts);
+  setSearchTerm(search);
+}
 
+const openModal = (type: "Create" | "Update", id?: number) => {
+    setIsModalOpen(true)
+    setFormType(type);
+    if (id) setCurrentProduct(() => products.find(pro => pro.id === id) || null);
+}
 
+  const closeModal = () => {
+    setCurrentProduct(null)
+    setIsModalOpen(false)
+  }
+
+const handleSorting = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedType(event.target.value);
+}
+
+const handleDeleteProduct = async (id: number) => {
+    const deletedProduct = await ProductServices.deleteProduct(id);
+    if (deletedProduct.success) {
+        deleteProduct(id);
+    } else {
+        setError(deletedProduct.message);
+    }
+}
+
+const handleCreateProduct = async (data: Product) => {
+  const createdProduct = await ProductServices.uploadNewProduct(data);
+  addNewProduct(createdProduct);
+  closeModal();
+}
+
+const handleUpdateProduct = async (data: Product) => {
+  const updatedProduct = await ProductServices.updateProduct(data);
+  updateProduct(updatedProduct);
+  closeModal();
+}
+
+  document.addEventListener('keydown', event => {
+    if (event.key === "Escape") closeModal();
+  })
+
+  if (error) return <h1 className="absolute z-10 bg-white top-10 left-10 p-10 shadow-md">{error}</h1>;
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-6">Product Management</h1>
+        <div className="flex gap-4">
+          <select name="sort" className="h-10 cursor-pointer border rounded-lg px-2" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+            <option value="name">Name</option>
+            <option value="category">Category</option>
+            <option value="id">Id</option>
+            <option value="price">Price</option>
+          </select>
+            <div className="relative flex-grow">
+                <input
+                type="text"
+                placeholder="Search orders..."
+                className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                value={searchTerm}
+                onChange={(e) => handleFilter(e.target.value)}
+                />
+                <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
+            </div>
+            <button
+                onClick={() => openModal("Create")}
+                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-6 rounded inline-flex items-center"
+            >
+              <PlusIcon className="w-4 h-4 mr-2" />
+              Add Product
+          </button>
+        </div>
+      <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+        <table className="min-w-full leading-normal">
+          <thead>
+            <tr>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                ID
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Price
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Stock
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {displayProducts?.map((product) => (
+              <tr key={product.id}>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  {product.id}
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  {product.name}
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <img src={(product.image as string)?.includes('uploads') ? 'http://localhost:5000/' + product.image : product.image as string} alt="Product Image" className="object-contain w-8" />
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  {product.category}
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  ${product.price}
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  {product.stock}
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <button
+                    onClick={() => openModal("Update", product.id)}
+                    className="text-blue-600 hover:text-blue-900 mr-3"
+                  >
+                    <PencilIcon className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteProduct(product.id)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    <TrashIcon className="w-5 h-5" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
+          <div className="relative top-20 mx-auto p-5 border w-[90%] md:w-1/2 shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+                { isModalOpen && 
+                  <InputProductForm 
+                    type={formType} 
+                    handleProductSubmit={(data: Product | NewProductType) => formType==="Create" ? handleCreateProduct(data as Product) : handleUpdateProduct(data as Product) } 
+                    close={() => closeModal()}
+                    product={currentProduct}
+                  />}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

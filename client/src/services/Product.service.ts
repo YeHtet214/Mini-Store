@@ -15,9 +15,10 @@ export const getAllProductsList = async () => {
       }
 }
 
-export const uploadNewProduct = async (data: FormData) => {
+export const uploadNewProduct = async (data: Product) => {
       const url = 'http://localhost:5000/products/manage/add';
 
+      console.log("Upload Prodduct: ", data)
       try {
             const response = await axios.post(url, data, {
                   headers: {
@@ -44,9 +45,14 @@ export const deleteProduct = async (id: number) => {
 }
 
 export const updateProduct = async (updatedProduct: Product) => {
+      console.log(updatedProduct);
       const url = `http://localhost:5000/products/manage/${updatedProduct.id}/update`;
       try {
-           const response = await axios.put(url, updatedProduct);  
+           const response = await axios.put(url, updatedProduct, {
+                  headers: {
+                        'Content-Type': 'multipart/form-data'
+                  }
+           });  
            return response.data;
       } catch (error) {
             console.log(error);

@@ -63,3 +63,16 @@ export const deleteOrder = async (orderId: number) => {
             console.log(error);
       }
 }
+
+export const getMonthlyOrderTotal = async () => {
+      try {
+            const res = await axios.get('http://localhost:5000/orders', {
+                  params: {
+                        filter: 'month'
+                  }
+            })
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
+}

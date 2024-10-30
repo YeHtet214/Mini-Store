@@ -1,12 +1,13 @@
 import { createContext, Dispatch, FC, PropsWithChildren, SetStateAction, useContext, useEffect, useState } from "react";
 // import { Order, OrderItems } from "../types/types";
 import * as OrderServices from "../services/Order.service";
-import { AdminOrder, OrderItemType } from "../types/types";
+import { Order, OrderItemType } from "../types/types";
 
 interface OrderContextType {
-    orders: AdminOrder[] | [];
-    setOrders: Dispatch<SetStateAction<AdminOrder[] | []>>;
-    updateOrderStatus: (order: AdminOrder) => void;
+    orders: Order[] | [];
+    setOrders: Dispatch<SetStateAction<Order[] | []>>;
+    addNewOrder: (order: Order) => void;
+    updateOrderStatus: (order: Order) => void;
     deleteOrder: (order: number) => void;
     orderItems: OrderItemType[] | [];
 }
@@ -15,17 +16,18 @@ const OrderContext = createContext<OrderContextType>({
     orders: [], 
     orderItems: [],
     setOrders: () => {},
+    addNewOrder: () => {},
     updateOrderStatus: () => {},
     deleteOrder: () => {}
 });
 
 const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     const [orderItems, setOrderItems] = useState<OrderItemType[] | []>([]);
-    const [orders, setOrders] = useState<AdminOrder[] | []>([]);
+    const [orders, setOrders] = useState<Order[] | []>([]);
 
     useEffect(() => {
         const getAllOrders = async () => {
-            const allOrders = await OrderServices.getAllOrders() as AdminOrder[];
+            const allOrders = await OrderServices.getAllOrders() as Order[];
             if (allOrders) setOrders(allOrders.sort((a, b) => a.order_id - b.order_id));
         }
         
@@ -37,7 +39,11 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         getAllOrderItems();
     }, []);
 
-    const updateOrderStatus = (updatedOrder: AdminOrder) => {
+    const addNewOrder = (order: Order) => {
+        setOrders(prev => [...prev, order]);
+    }
+
+    const updateOrderStatus = (updatedOrder: Order) => {
         setOrders(prevOrders => 
             [...prevOrders.filter(order => order.order_id !== updatedOrder.order_id), updatedOrder]
             .sort((a, b) => a.order_id - b.order_id)
@@ -48,12 +54,12 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         setOrders(prevOrders => 
             prevOrders
                 .filter(order => order.order_id !== deletedOrderId)
-                .sort((a, b) => a.order_id - b.order_id)
+                // .sort((a, b) => a.order_id - b.order_id)
         )
     }
 
     return (
-        <OrderContext.Provider value={{ orders, setOrders, orderItems, updateOrderStatus, deleteOrder }}>
+        <OrderContext.Provider value={{ orders, setOrders, orderItems, addNewOrder, updateOrderStatus, deleteOrder }}>
             {children}
         </OrderContext.Provider>
     )

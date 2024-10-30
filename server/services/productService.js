@@ -52,13 +52,13 @@ export const uploadNewProductByAdmin = async ({ name, category, price, stock, im
     }
 }
 
-export const updateProduct = async ({ id, name, price, stock, description }) => {
+export const updateProduct = async ({ id, name, image, price, stock, description }) => {
     try {
         const { rows } = await client.query(`
             UPDATE products
-            SET name = $1, price = $2, stock = $3, description = $4
-            WHERE id = $5 RETURNING *
-            `, [name, price, stock, description, id])
+            SET name = $1, price = $2, image = $3, stock = $4, description = $5
+            WHERE id = $6 RETURNING *
+            `, [name, price, image, stock, description, id])
 
         return rows[0];
     } catch (err) {

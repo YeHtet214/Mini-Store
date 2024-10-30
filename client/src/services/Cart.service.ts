@@ -2,6 +2,7 @@ import axios from "axios";
 import { getUserId } from "../helper/helper";
 
 export const getCartItemsByUserId = async () => {
+      console.log("Get Cart Items SErvice: ")
       const userId = getUserId();
       const url = `http://localhost:5000/cart/${userId}/cartItems`;
       try {

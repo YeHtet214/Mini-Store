@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Product } from "../types/types";
 import AddToCartBtn from "./AddToCartBtn";
 import { useEffect, useState } from "react";
-// import AddToCartBtn from "./AddToCartBtn";
 
 interface Props {
       product: Product;
@@ -13,7 +12,7 @@ const ProductCard = ({ product }: Props) => {
       const [prodctImg, setProductImg] = useState<string>('');
 
       useEffect(() => {
-            const imgUrl = image.includes('uploads') ? 'http://localhost:5000/' + image : image;
+            const imgUrl = (image as string)?.includes('uploads') ? 'http://localhost:5000/' + image : image as string;
             setProductImg(imgUrl);
       }, []);
 

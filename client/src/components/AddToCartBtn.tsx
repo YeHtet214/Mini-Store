@@ -31,7 +31,7 @@ const AddToCartBtn = ({ productId }: Props) => {
       }
 
       return (
-            <span onClick={handleCartUpdate} className="text-right border-2 border-purple-800 text-purple-800 px-5 py-1 rounded cursor-pointer hover:bg-purple-800 hover:text-white transition-all ease-out hover:scale-95">
+            <span onClick={handleCartUpdate} className="text-right border-2 border-purple-800 text-purple-800 px-2 py-1 rounded cursor-pointer hover:bg-purple-800 hover:text-white transition-all ease-out hover:scale-95">
                   Add to Cart
                   <ShoppingCartIcon className="w-7 inline ml-4"/>
             </span>

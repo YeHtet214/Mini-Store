@@ -10,6 +10,7 @@ interface UserContextType {
       setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
       addUser: (user: User) => void;
       deleteUser: (userId: number) => void;
+      updateUser: (user: User) => void;
 }
 
 const defaultUserContext: UserContextType = {
@@ -20,6 +21,7 @@ const defaultUserContext: UserContextType = {
       setIsLoggedIn: () => {},
       addUser: () => {},
       deleteUser: () => {},
+      updateUser: () => {},
 }
 
 const UserContext = createContext<UserContextType>(defaultUserContext);
@@ -30,32 +32,29 @@ const UserProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       const [isLoggedIn, setIsLoggedIn] = useState<boolean>(localStorage.getItem('token') ? true : false);
 
       useEffect(() => {
-            console.log("User logged IN: ", isLoggedIn);
             if (isLoggedIn) {
                   UserService.getCurrentUser().then((data: User) => setCurrentUser(data));
                   UserService.getAllUsers().then((data: User[]) => setUsers(data));
             }
       }, [isLoggedIn]);
 
-      useEffect(() => {
-            console.log("Current User", currentUser);
-      }, [currentUser])
-
-      useEffect(() => {
-            console.log(users);
-      }, [users])
-
       const addUser = (user: User) => {
             setUsers(prev => [...prev, user]);
       }
 
+      const updateUser = (updatedUser: User) => {
+            setUsers(prev => prev.map(user => {
+                  if (user.user_id !== updatedUser.user_id) return user;
+                  return updatedUser;
+            }))
+      }
+
       const deleteUser = (userId: number) => {
-            console.log("Delete user id", userId)
             setUsers(prevUsers => prevUsers.filter(prevUser => prevUser.user_id != userId));
       }
 
       return (
-            <UserContext.Provider value={{ currentUser, setCurrentUser, users, addUser, deleteUser, isLoggedIn, setIsLoggedIn }}>
+            <UserContext.Provider value={{ currentUser, setCurrentUser, users, addUser, deleteUser, updateUser, isLoggedIn, setIsLoggedIn }}>
                   {children}
             </UserContext.Provider>
       )

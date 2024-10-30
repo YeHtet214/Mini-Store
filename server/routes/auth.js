@@ -29,8 +29,11 @@ router.post('/login', async (req, res) => {
 router.post('/register', async (req, res) => {
     const {name, email, password} = req.body;
     try {
-        const { token, user_id } = await UserService.registerUser(name, email, password);
-        res.json({ token, user_id });
+        const newUser = await UserService.registerUser(name, email, password);
+        if ((!newUser.token || !newUser.user_id) && newUser.status === 409) {
+            return res.json({ msg: newUser.msg, status: newUser.status });
+        }
+        return res.json({ token: newUser.token, user_id: newUser.user_id });
     } catch (error) {
         console.log("There is an error on register");
     }
@@ -77,8 +80,15 @@ router.get(
         const user = req.user;
         try {
             const role = user.email === "yhtet1934@gmail.com" ? 'admin' : 'user'; // for initial admin setup
-            const { token, user_id } = await UserService.registerUser(user.name, user.email, user.password, role);
-            res.redirect(`http://localhost:5173?token=${token}&user_id=${user_id}`);
+            console.log("User Data: ", user)
+            const isUserExist = await UserService.getUserByEmail(user.email);
+            if (isUserExist) {
+                const { token, user_id } = await UserService.authenticateUser(user.email, user.password)
+                return res.redirect(`http://localhost:5173?token=${token}&user_id=${user_id}`);
+            } else {
+                const { token, user_id } = await UserService.registerUser(user.name, user.email, user.password, role);
+                return res.redirect(`http://localhost:5173?token=${token}&user_id=${user_id}`);
+            }
         } catch(err) {
             console.log(err);
             return res.status(500).send("Registration failed.");

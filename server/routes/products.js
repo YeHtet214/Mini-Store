@@ -20,16 +20,16 @@ router.get('/:id', async (req, res) => {
 // Upload New Product by Admin Route
 router.post('/manage/add', upload.single('image'), async (req, res) => {
       const { name, category, price, stock, description } = req.body;
-      const image = req.file.path;
-      console.log("New product stock: ", stock, typeof stock);
+      const image = req.file && req.file.path;
       const newProduct = await ProductService.uploadNewProductByAdmin({ name, category, price, stock, image, description});      
       res.json(newProduct);
 });
 
 // Update the Product Route
-router.put('/manage/:id/update', async (req, res) => {
+router.put('/manage/:id/update', upload.single('image'), async (req, res) => {
       const data = req.body;
-      const updatedProduct = await ProductService.updateProduct(data);
+      const image = req.file && req.file.path;
+      const updatedProduct = await ProductService.updateProduct({ ...data, image });
       res.json(updatedProduct);
 })
 

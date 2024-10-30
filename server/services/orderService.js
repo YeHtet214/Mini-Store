@@ -37,6 +37,7 @@ export const createNewOrder = async ({ userId, totalAmount }) => {
 
       try {
             const { rows } = await client.query(query, [userId, totalAmount, "pending"]);
+            console.log("Created Order Summary: ", rows[0])
             return rows[0];
       } catch (error) {
             console.log(error);
@@ -85,5 +86,24 @@ export const deleteOrder = async (orderId) => {
       } catch (err) {
             console.log(err);
             throw new Error(err);
+      }
+}
+
+export const getMonthlyOrderTotal = async () => {
+      try {
+            const { rows } = await client.query(`
+                  SELECT 
+                        TO_CHAR(DATE_TRUNC('month', order_date), 'YYYY-MM') AS month,
+                        SUM(total_amount) AS total_sales
+                  FROM
+                        orders
+                  GROUP BY 
+                        DATE_TRUNC('month', order_date)
+                  ORDER BY 
+                        month;`);
+console.log(rows);
+            return rows;
+      } catch (error) {
+            console.log(error);
       }
 }

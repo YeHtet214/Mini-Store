@@ -1,9 +1,11 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as UserServices from "../services/User.service";
 import { useUser } from "../context/UserContextProvider";
 import { AuthResponse, userInfo } from "../types/types";
 import { AlertCircle, Lock, Mail } from "lucide-react";
+
+const authType = "register";
 
 const Form = () => {
       const [userInput, setUserInput] = useState<userInfo>({ name: '', email: '', password: ''});
@@ -11,26 +13,20 @@ const Form = () => {
       const { setIsLoggedIn, setCurrentUser } = useUser();
       const navigate = useNavigate();
 
-      const handleResponse = (response: AuthResponse): boolean => {
-            if (response.message === "Email not found") {
-                  setError('emailNotFound')
-                  return false;
-            } else if (response.message === "Incorrect Password") {
-                  setError('incorrectPassword')
-                  return false;
-            }
-            return true;
-      }
-
       const handleSubmit = async (e: FormEvent) => {
             e.preventDefault();
-            console.log("LOgin data: ", userInput);
+            const newUser = await UserServices.registerUser(userInput);
 
-            const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
-            if (isAuthenticate) {
+            console.log(newUser);
+
+            if (newUser.status && newUser.status === 409) {
+                  return setError(newUser.msg);
+            } else if (newUser.token && newUser.user_id) {
                   setIsLoggedIn(true);
-                  UserServices.getCurrentUser().then(data => setCurrentUser(data));
-                  navigate('/');
+                  UserServices.getCurrentUser().then(setCurrentUser);
+                  localStorage.setItem('token', newUser.token);
+                  localStorage.setItem('user_id', newUser.user_id);
+                  navigate("/");
             }
       }
 
@@ -41,6 +37,24 @@ const Form = () => {
 
       return (
             <form className="space-y-6" onSubmit={handleSubmit}>
+                  <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+                        <div className="mt-1 relative rounded-md shadow-sm">
+                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Mail className="h-5 w-5 text-gray-400" />
+                              </div>
+                              <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    placeholder="Jhon Doe"
+                                    required
+                                    className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                    value={userInput.name}
+                                    onChange={handleChange}
+                              />
+                        </div>
+                  </div>
                   <div>
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email address</label>
                         <div className="mt-1 relative rounded-md shadow-sm">

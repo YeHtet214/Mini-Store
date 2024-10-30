@@ -4,8 +4,14 @@ import * as OrderService from "../services/orderService.js";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-      const orders = await OrderService.getAllOrders();
-      res.json(orders);
+      const { filter } = req.query;
+      if (filter === "month") {
+            const monthlyOrders = await OrderService.getMonthlyOrderTotal();
+            res.status(200).json(monthlyOrders);
+      } else {
+            const orders = await OrderService.getAllOrders();
+            res.status(200).json(orders);
+      }
 });
 
 router.get("/items", async (req, res) => {

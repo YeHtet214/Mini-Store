@@ -9,4 +9,10 @@ router.post('/users/create', async (req, res) => {
     res.json(createdUser);
 })
 
+router.put('/users/:id/update', async (req, res) => {
+    const userData = req.body;
+    const updatedUser = await UserService.updateUserByAdmin(userData, req.params.id);
+    res.json(updatedUser);
+})
+
 export default router;

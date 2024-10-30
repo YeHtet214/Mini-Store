@@ -7,7 +7,7 @@ import * as CartService from "../services/cartService.js";
 const ROUND_SALT = 10;
 const DEFAULT_ROLE = "user"; 
 
-export const getUserData = async (email) => {
+export const getUserByEmail = async (email) => {
       try {
             const userData = await client.query(
                   "SELECT * FROM users WHERE email=$1",
@@ -42,9 +42,10 @@ export const getAllUsers = async () => {
 
 export const registerUser = async (name, email, enterPassword, role = DEFAULT_ROLE) => {
       try {
-            const existingUser = await getUserData(email);
-            if (existingUser) {
-                  return await authenticateUser(email, enterPassword);
+            const existingUser = await getUserByEmail(email);
+            if (existingUser) { // if the user already exist, redirect to the login page again
+                  // return await authenticateUser(email, enterPassword);
+                  return { status: 409, msg: "User Already Exist! Please login again" }
             } else {
                   const hash = await bcrypt.hash(enterPassword, ROUND_SALT);
                   const newUser = await client.query(
@@ -66,7 +67,7 @@ export const registerUser = async (name, email, enterPassword, role = DEFAULT_RO
 }
 
 export const authenticateUser = async (email, enterPassword) => {
-      const userData = await getUserData(email);
+      const userData = await getUserByEmail(email);
 
       if (!userData) {
             throw new Error("Email not found")
@@ -102,18 +103,48 @@ export const deleteUser = async (userId) => {
 }
 
 export const createNewUserByAdmin = async ({ name, email, password, role}) => {
-      const existingUser = await getUserData(email);
-      if (existingUser) throw new Error("User already exist!");
-      const hash = await bcrypt.hash(password, ROUND_SALT);
-      const newUser = await client.query(
-            `INSERT INTO users (name, email, password, role) 
-            VALUES ($1, $2, $3, $4) RETURNING *`,
-            [name, email, hash, role]
-      )
-      if (newUser.rows.length > 0) {
-            // Create cart for associate user
-            await CartService.createCart(newUser.rows[0].user_id);
-            let value = await authenticateUser(email, password);
-            return value;
+      try {
+            const existingUser = await getUserData(email);
+            if (existingUser) throw new Error("User already exist!");
+            const hash = await bcrypt.hash(password, ROUND_SALT);
+            const newUser = await client.query(
+                  `INSERT INTO users (name, email, password, role) 
+                  VALUES ($1, $2, $3, $4) RETURNING *`,
+                  [name, email, hash, role]
+            )
+            if (newUser.rows.length > 0) {
+                  // Create cart for associate user
+                  await CartService.createCart(newUser.rows[0].user_id);
+                  let value = await authenticateUser(email, password);
+                  if (value) return newUser.rows[0];
+            }
+      } catch (error) {
+            console.log(error)
       }
+}
+
+export const updateUserByAdmin = async (userData, id) => {
+      const UPDATE_COLS = [];
+      const values = [];
+
+      Object.keys(userData).forEach(key => {
+            if (userData[key]) {
+                  UPDATE_COLS.push(`${key}=$${UPDATE_COLS.length + 1}`);
+                  values.push(userData[key]);
+            }
+      });
+
+      const FORMAT_COLS_QUERY = UPDATE_COLS.join(", ");
+      console.log(FORMAT_COLS_QUERY);
+      values.push(id);
+      const query = `UPDATE users SET ${UPDATE_COLS} WHERE user_id = $${values.length} RETURNING *`;
+      console.log(query);
+      console.log(values);
+      try {
+            const { rows } = await client.query(query, values);
+            return rows[0];
+      } catch (err) {
+            console.log(err);
+      }
+
 }

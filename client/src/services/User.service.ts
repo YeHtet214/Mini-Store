@@ -5,8 +5,6 @@ import { jwtDecode } from "jwt-decode";
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');
 
-      console.log("token: ", token);
-      if (token) console.log(jwtDecode(token));
       const axiosInstance = axios.create({
             baseURL: 'http://localhost:5000/auth/user',
             headers: {
@@ -16,7 +14,6 @@ export const getCurrentUser = async () => {
 
       try {
             const res = await axiosInstance.get(`/profile`);
-            console.log("Current User REturn: ", res);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -86,10 +83,18 @@ export const createNewUser = async (user: User) => {
       }
 }
 
+export const updateUser = async (user: User) => {
+      try {
+            const res = await axios.put(`http://localhost:5000/manageUsers/users/${user.user_id}/update`, user);
+            return res.data;
+      } catch (error) {
+            console.log(error);
+      }
+}
+
 export const deleteUser = async (userId: number) => {
       try {
             const res = await axios.delete(`http://localhost:5000/auth/users/${userId}/delete`);
-            console.log("Delete REturn ", res.data);
             return res.data;
       } catch (error) {
             console.log(error);

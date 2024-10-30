@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContextProvider"
 import * as OrderServices from "../services/Order.service";
 import { Order } from "../types/types";
+import { UseOrders } from "../context/OrderContextProvider";
 
 const CheckOut = () => {
       const { checkOutItems } = useCart();
+      const { addNewOrder } = UseOrders();
       const [totalAmount, setTotalAmount] = useState<number>(0);
       const [order, setOrder] = useState<Order>();
       // const deliveryCharges = Math.floor((Math.random() * 20) + 5); // just the demostration for the functionality
@@ -34,6 +36,7 @@ const CheckOut = () => {
 
             if (newOrder) {
                   setOrder(newOrder);
+                  addNewOrder(newOrder);
                   await OrderServices.addOrderItems(newOrder.order_id, checkOutItems);
             }
       }
@@ -41,7 +44,7 @@ const CheckOut = () => {
       const handlePayment = (status: boolean) => {
             if (status && order) {
                   // success the order
-                  OrderServices.updateOrderState(order.order_id);
+                  OrderServices.updateOrderState(order.order_id, "completed");
             } else {
                   console.log("Order failed due to payment error")
             }
@@ -53,7 +56,7 @@ const CheckOut = () => {
                   {checkOutItems?.map(item => (
                         // <CartItem key={item.id} item={item} />
                         <div key={item.id}>
-                              <h3>{item.title}</h3>
+                              <h3>{item.name}</h3>
                               <img src={item.image} alt="product_image" className="w-20" />
                         </div>
                   ))}

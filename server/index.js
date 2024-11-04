@@ -9,6 +9,7 @@ import productRoutes from "./routes/products.js";
 import cartRoutes from "./routes/cart.js";
 import orderRoutes from "./routes/order.js";
 import userManagementRoutes from "./routes/manageUsers.js";
+import apiRoutes from "./routes/api.js";
 import { fileURLToPath } from 'url';
 
 const app = express()
@@ -34,5 +35,6 @@ app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/orders', orderRoutes);
 app.use('/manageUsers', userManagementRoutes);
+app.use('/api', apiRoutes);
 
 app.listen(PORT, () => console.log("Sever is running on port ", PORT))

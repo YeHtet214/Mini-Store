@@ -83,35 +83,37 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
                 required={type === "create" ? true : false}
               />
             </div>
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={userData.password}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="••••••••"
-                required={type === "create" ? true : false}
-              />
-            </div>
-            <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-                Role
-              </label>
-              <select
-                id="role"
-                name="role"
-                value={userData.role}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                required={type === "create" ? true : false}
-              >
-                <option value="admin" >Admin</option>
-                <option value="user" >User</option>
+              { type === "create" && (
+                  <div>
+                      <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                          Password
+                      </label>
+                      <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          value={userData.password}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          placeholder="••••••••"
+                          required={type === "create" ? true : false}
+                      />
+                  </div>
+              )}
+              <div>
+                  <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+                      Role
+                  </label>
+                  <select
+                      id="role"
+                      name="role"
+                      value={userData.role}
+                      onChange={handleChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      required={type === "create" ? true : false}
+                  >
+                      <option value="admin">Admin</option>
+                      <option value="user">User</option>
               </select>
             </div>
             <div className="flex justify-end mt-6">

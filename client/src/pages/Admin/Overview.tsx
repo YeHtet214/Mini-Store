@@ -46,7 +46,7 @@ interface ChartProp {
 }
 
 const Chart = ({chartData}: ChartProp) => (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 rounded-lg shadow-md max-h-max">
       <h3 className="text-xl font-semibold mb-4">Monthly Sales</h3>
       <div>
         <Bar data={chartData} className="" />
@@ -82,7 +82,7 @@ const RecentOrders = ({ orders }: OrdersProps) => {
                   <td className="px-4 py-2 whitespace-nowrap">{currency.format(order.total_amount)}</td>
                   <td className="px-4 py-2 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                      order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {order.status}
                     </span>
@@ -150,33 +150,6 @@ const SalesOverview = () => {
                     </div>
                 </main>
             </div>
-
-            {/* <div>
-                <h2>Recent Orders</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Id</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Name</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { orders?.map(order => (
-                            <tr key={order.order_id}>
-                                <td className="px-6 py-4 whitespace-nowrap">{order.order_id}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{order.name}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{new Date(order.order_date).toLocaleDateString()}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{order.total_amount}</td>
-                                <td className="px-6 py-4 whitespace-nowrap">{order.status}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div> */}
-
         </>
     )
 }

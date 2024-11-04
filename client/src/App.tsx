@@ -14,6 +14,8 @@ import ManageOrders from "./pages/Admin/ManageOrders";
 import ManageUsers from "./pages/Admin/ManageUsers";
 import SalesOverview from "./pages/Admin/Overview";
 import ProfileRoute from "./routes/ProfileRoute";
+import Success from "./pages/success.tsx";
+import Cancel from "./pages/Cancel.tsx";
 
 const App = () => {
       return (
@@ -38,6 +40,8 @@ const App = () => {
                               <Route path="/cart/checkout" element={<CheckOut />} />
                               <Route path="/auth/login" element={<Login />} />
                               <Route path="/auth/register" element={<Register />} />
+                              <Route path="/success" element={<Success />} />
+                              <Route path="cancel" element={<Cancel />} />
                               <Route path="*" element={<p>There's NOTHING here! 404.</p>} />
                         </Routes>
                   </div>

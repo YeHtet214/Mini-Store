@@ -10,6 +10,7 @@ interface OrderContextType {
     updateOrderStatus: (order: Order) => void;
     deleteOrder: (order: number) => void;
     orderItems: OrderItemType[] | [];
+    addNewOrderItems: (item: OrderItemType) => void;
 }
 
 const OrderContext = createContext<OrderContextType>({
@@ -18,7 +19,8 @@ const OrderContext = createContext<OrderContextType>({
     setOrders: () => {},
     addNewOrder: () => {},
     updateOrderStatus: () => {},
-    deleteOrder: () => {}
+    deleteOrder: () => {},
+    addNewOrderItems: () => {}
 });
 
 const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
@@ -28,6 +30,7 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     useEffect(() => {
         const getAllOrders = async () => {
             const allOrders = await OrderServices.getAllOrders() as Order[];
+            console.log(allOrders);
             if (allOrders) setOrders(allOrders.sort((a, b) => a.order_id - b.order_id));
         }
         
@@ -58,8 +61,12 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         )
     }
 
+    const addNewOrderItems = (newItem: OrderItemType) => {
+        setOrderItems(items => [...items, newItem]);
+    }
+
     return (
-        <OrderContext.Provider value={{ orders, setOrders, orderItems, addNewOrder, updateOrderStatus, deleteOrder }}>
+        <OrderContext.Provider value={{ orders, setOrders, orderItems, addNewOrder, updateOrderStatus, deleteOrder, addNewOrderItems }}>
             {children}
         </OrderContext.Provider>
     )

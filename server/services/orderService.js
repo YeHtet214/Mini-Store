@@ -3,14 +3,14 @@ import { client } from "../db/index.js";
 export const getAllOrders = async () => {
       try {
             const { rows } = await client.query(`
-                  SELECT order_id, name, orders.user_id, order_date, total_amount, status 
+                  SELECT order_id, user_id, order_date, total_amount, order_status 
                   FROM orders
-                  INNER JOIN users 
-                  ON orders.user_id = users.user_id;
+//                   INNER JOIN users 
+//                   ON orders.user_id = users.user_-id;
             `);
             return rows;
       } catch (error) {
-            return { success: false, msg: "There is an error getting the orders: ", error};
+          return {success: false, msg: "There is an error getting the orders: ", error};
       }
 }
 
@@ -29,69 +29,85 @@ export const getAllOrderItems = async () => {
 }
 
 export const createNewOrder = async ({ userId, totalAmount }) => {
-      const query = `
+    const query = `
             INSERT INTO orders (user_id, total_amount, status)
             VALUES ($1, $2, $3)
             RETURNING *
       `;
 
-      try {
-            const { rows } = await client.query(query, [userId, totalAmount, "pending"]);
-            console.log("Created Order Summary: ", rows[0])
-            return rows[0];
-      } catch (error) {
-            console.log(error);
-      }
-}
+    try {
+        const { rows } = await client.query(query, [
+            userId,
+            totalAmount,
+            "Processing",
+        ]);
+        return rows[0];
+    } catch (error) {
+        console.log(error);
+    }
+};
 
-export const addOrderItems = (orderId, items) => {
-      const query = `
+export const addOrderItems = async (orderId, items) => {
+    const query = `
             INSERT INTO orderitems (order_id, product_id, price, quantity, sub_total)
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *
       `;
 
-      try {
+    try {
+        const NEW_ORDER_ITEMS = await Promise.all(
             items?.map(async (item) => {
-                  await client.query(query, [orderId, item.product_id, item.price, item.quantity, item.quantity * item.price])
+                const { rows } = await client.query(query, [
+                    orderId,
+                    item.product_id,
+                    item.price,
+                    item.quantity,
+                    item.quantity * item.price,
+                ]);
+                return rows[0];
             })
-      } catch (error) {
-            console.log(error);
-      }
-}
+        );
+
+        return NEW_ORDER_ITEMS;
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 export const updateOrderStatus = async (orderId, status) => {
-      const query = `
+    const query = `
             UPDATE orders SET status = $1
             WHERE order_id = $2 RETURNING *;
       `;
-      try {
-            const { rows } = await client.query(query, [status, orderId]);
-            console.log("Rows: ", rows);
-            return rows[0];
-      } catch (error) {
-            console.log(error);
-            throw new Error(error);
-      }
-}
+    try {
+        const { rows } = await client.query(query, [status, orderId]);
+        return rows[0];
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};
 
 export const deleteOrder = async (orderId) => {
-      try {
-            const { rows } = await client.query(`
+    try {
+        const { rows } = await client.query(
+            `
                   DELETE FROM orders 
                   WHERE order_id = $1
                   Returning order_id
-            `, [orderId]);
-            return rows[0];
-      } catch (err) {
-            console.log(err);
-            throw new Error(err);
-      }
-}
+            `,
+            [orderId]
+        );
+        return rows[0];
+    } catch (err) {
+        console.log(err);
+        throw new Error(err);
+    }
+};
 
 export const getMonthlyOrderTotal = async () => {
-      try {
-            const { rows } = await client.query(`
+    try {
+        const { rows } = await client.query(`
                   SELECT 
                         TO_CHAR(DATE_TRUNC('month', order_date), 'YYYY-MM') AS month,
                         SUM(total_amount) AS total_sales
@@ -101,9 +117,35 @@ export const getMonthlyOrderTotal = async () => {
                         DATE_TRUNC('month', order_date)
                   ORDER BY 
                         month;`);
-console.log(rows);
-            return rows;
-      } catch (error) {
+        return rows;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const addNewAddress = async ({
+    address,
+    city,
+    state,
+    postcode,
+    country,
+    user_id,
+}) => {
+    try {
+        const { rows } = await client.query(
+            `
+                  INSERT INTO addresses (address_line_1, city, state, postal_code, country, user_id)
+                  VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+            `,
+            [address, city, state, postcode, country, user_id]
+        );
+        return rows[0];
+    } catch (error) {
+        if (error.code == 23505) {
+            // checking error code for duplilcate entry
+            return { status: 200, msg: "Address already exist" };
+        } else {
             console.log(error);
-      }
-}
+        }
+    }
+};

@@ -1,30 +1,20 @@
--- CREATE TABLE products (
---     id SERIAL PRIMARY KEY,
---     title VARCHAR(50) NOT NULL,
---     price INT NOT NULL,
---     description TEXT NOT NULL,
---     category VARCHAR(50),
---     images VARCHAR(255) NOT NULL
--- );
-
 CREATE TABLE "products" (
-  "product_id" INT PRIMARY KEY,
-  "name" VARCHAR(50) NOT NULL,
+  "id" SERIAL PRIMARY KEY,
+  "name" VARCHAR(255) NOT NULL,
   "description" TEXT NOT NULL,
-  "price" INT NOT NULL,
+  "price" DECIMAL(5, 2) NOT NULL,
   "category" VARCHAR(50) NOT NULL,
-  "category_id" INT NOT NULL,
   "image" TEXT NOT NULL,
   "stock" INT
 );
 
 CREATE TABLE "users" (
-  "user_id" INT PRIMARY KEY,
-  "name" VARCHAR(50) NOT NULL,
+  "user_id" SERIAL PRIMARY KEY,
+  "role": VARCHAR (50) DEFAULT "user",
+  "name" VARCHAR(255) NOT NULL,
   "email" VARCHAR(255) UNIQUE NOT NULL,
   "password" VARCHAR(255) NOT NULL,
-  "address" TEXT,
-  "phone_number" INT NOT NULL
+  "address" TEXT
 );
 
 CREATE TABLE "categories" (
@@ -49,7 +39,7 @@ CREATE TABLE "order_item" (
 );
 
 CREATE TABLE "cart" (
-  "id" INT PRIMARY KEY,
+  "id" SERIAL PRIMARY KEY,
   "user_id" INT NOT NULL
 );
 
@@ -61,25 +51,23 @@ CREATE TABLE "cart_item" (
 );
 
 CREATE TABLE addresses (
-  address_id SERIAL PRIMARY KEY,
-  user_id INT REFERENCES users(user_id),
-  address_line_1 VARCHAR(255) NOT NULL,
-  city VARCHAR(100) NOT NULL,
-  state VARCHAR(100),
-  postal_code VARCHAR(20) NOT NULL,
-  country VARCHAR(100) NOT NULL
+    address_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id),
+    address_line_1 VARCHAR(255) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    state VARCHAR(100),
+    postal_code VARCHAR(20) NOT NULL,
+    country VARCHAR(100) NOT NULL,
+    UNIQUE (user_id, address_line_1, city, postal_code, country)
 );
-
-ALTER TABLE orders 
-ADD COLUMN address_id INT REFERENCES addresses(address_id);
 
 ALTER TABLE "cart" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("user_id");
 
 ALTER TABLE "cart_item" ADD FOREIGN KEY ("cart_id") REFERENCES "cart" ("id");
 
-ALTER TABLE "cart_item" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("product_id");
+ALTER TABLE "cart_item" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
-ALTER TABLE "order_item" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("product_id");
+ALTER TABLE "order_item" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
 ALTER TABLE "order_item" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("order_id");
 
@@ -89,7 +77,6 @@ CREATE TABLE orders (
   order_id SERIAL PRIMARY KEY,
   user_id INT NOT NULL,
   order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  address TEXT,
   status VARCHAR(20),
   payment_method TEXT
 );

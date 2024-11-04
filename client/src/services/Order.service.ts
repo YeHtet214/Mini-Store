@@ -6,6 +6,7 @@ export const getAllOrders  = async () => {
       const url = 'http://localhost:5000/orders';
       try {
             const response = await axios.get(url);
+            console.log("respnose data: ", response.data);
             return response.data;
       } catch (error) {
             console.log(error);
@@ -37,8 +38,8 @@ export const createOrderSummary = async (totalAmount: number) => {
 export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
       const url = `http://localhost:5000/orders/${orderId}/add`;
       try {
-            const res = await axios.post(url, items);
-            console.log(res.data);
+            const { data } = await axios.post(url, items);
+            return data;
       } catch (error) {
             console.log(error);
       }

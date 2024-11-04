@@ -1,5 +1,18 @@
 import { client } from "../db/index.js";
 
+const getCartIdByUser = async (userId) => {
+      try {
+            console.log("THE USER ID: ", userId)
+            const { rows } = await client.query("SELECT id FROM cart WHERE user_id = $1", [userId]);
+            const cartId = rows[0] ? rows[0].id : null;
+            console.log("Getting cart ID: ", rows);
+            return cartId;
+      } catch (error) {
+            console.log(error);
+            throw new Error(error);
+      }
+}
+
 export const getCartItemsByUserId = async (user_id) => {
       const cartId = await getCartIdByUser(user_id);
       const query = `
@@ -23,17 +36,6 @@ export const getCartItemsByUserId = async (user_id) => {
             return res.rows;
       } catch (error) {
             throw new Error(error.message);
-      }
-}
-
-async function getCartIdByUser(userId) {
-      try {
-            const { rows } = await client.query("SELECT id FROM cart WHERE user_id = $1", [userId]);
-            const cartId = rows[0] ? rows[0].id : null;
-            return cartId;
-      } catch (error) {
-            console.log(error);
-            throw new Error(error);
       }
 }
 
@@ -61,9 +63,13 @@ export async function getCartItemsByItemId(id) {
 
 export const createCart = async (user_id) => {
       try {
-            const isExist = (await client.query("SELECT * FROM cart WHERE user_id = $1", [user_id])).rows.length > 0 ? true : false;
+            const isExist = (await client.query("SELECT * FROM cart WHERE user_id = $1", [user_id])).rows.length > 0;
+            console.log('Is cart exist: ', isExist);
             if (isExist) return;
-            await client.query("INSERT INTO cart (user_id) VALUES ($1) RETURNING *;", [user_id]);
+            const { rows } = await client.query("INSERT INTO cart (user_id) VALUES ($1) RETURNING *;", [user_id]);
+            console.log(rows);
+            const res = await client.query("SELECT * FROM cart WHERE user_id = $1", [user_id]);
+            console.log("Inserted cart related to user", res.rows);
             return { message: 'success' };
       } catch (error) {
             console.log("Cart Creation Error: ", error);
@@ -73,6 +79,7 @@ export const createCart = async (user_id) => {
 
 export const insertNewCartItem = async (user_id, productId, quantity) => {
       const cartId = await getCartIdByUser(user_id);
+      console.log("Cart if of user", cartId, user_id);
       try {
             await client.query("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *", [cartId, productId, quantity]);
             return getCartItemsByUserId(user_id);

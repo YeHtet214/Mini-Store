@@ -1,6 +1,4 @@
-import { UserIcon } from "@heroicons/react/24/outline";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useUser } from "../context/UserContextProvider";
 import { useCart } from "../context/CartContextProvider";
 import { hasRole } from "../services/User.service";
@@ -73,11 +71,18 @@ const Header = () => {
                   
                   { isLoggedIn ? (
                         <div className="flex items-center">
-                              <Link to="/cart" className={`p-1 relative rounded-full text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${activeLink === "cart" && "text-indigo-500"}`}>
-                                    <span className="sr-only">View cart</span>
-                                    <ShoppingCart className="h-6 w-6" />
-                                    {<span className="absolute -top-2 -left-2">{totalQtyInCart}</span>}
-                              </Link>
+
+                              { !isAdmin && (
+                                    <Link to="/cart" className={`p-1 relative rounded-full text-gray-700 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${activeLink === "cart" && "text-indigo-500"}`}>
+                                          <span className="sr-only">View cart</span>
+
+                                              <>
+                                                    <ShoppingCart className="h-6 w-6" />
+                                                    <span className="absolute -top-2 -left-2">{totalQtyInCart}</span>
+                                              </>
+                                    </Link>
+                              )}
+
                               <Link to="/auth/profile" className={`flex grow ml-4 text-sm font-medium text-gray-700 relative ${activeLink === "profile" && "text-indigo-500"}`}>
                                     <User />
                                     <span className="absolute -top-4 right-0 translate-x-2/3 text-nowrap">{currentUser?.name}</span>

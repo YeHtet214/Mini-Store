@@ -1,8 +1,7 @@
 import { CartItemType } from '../types/types';
 import * as CartServices from '../services/Cart.service';
-import { currency, removeLeadingZero } from '../helper/helper';
+import { currency } from '../helper/helper';
 import { useCart } from '../context/CartContextProvider';
-import { TrashIcon } from '@heroicons/react/24/outline';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
@@ -21,19 +20,11 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
             // Format the image URL if it's created by admin
             const imgUrl = item.image.includes('uploads') ? 'http://localhost:5000/' + item.image : item.image;
             setProductImg(imgUrl);
-      }, []);
+      }, [item.image]);
 
       useEffect(() => {
             handleSelectItem(checkout);
-      }, [cartItems])
-      
-      const handleInputQuantity = async (input: HTMLInputElement) => {
-            const [value, first] = [Number(input.value), Number(input.value[0])];
-            const formattedQty = removeLeadingZero(value, first);
-            input.value = String(formattedQty);
-            const updateCartItems = await CartServices.updateCart('updateCartItemQty', item.product_id, item.id, formattedQty);
-            setCartItems(updateCartItems);
-      }
+      }, [cartItems]);
 
       const handleUpdateCartItemQty = async (qty: number) => {
             const newQty = item.quantity + qty;
@@ -68,23 +59,6 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
 
       if (!item) return;
       return (
-            // <div className='mb-4'>
-            //       <input type="checkbox" checked={checkout} onChange={handleCheckBoxChange} />
-            //       <img src={productImg} alt="Product Image" width={100} />
-            //       <div>
-            //             <h3>{item.name}</h3><br />
-            //             <b>${item.price}</b>
-            //             <p>{item.description}</p>
-            //       </div>
-            //       <div className='flex justify-between'>
-            //             <div>
-            //                   <span onClick={() => handleUpdateCartItemQty(-1)} >-</span>
-            //                   <input type="number" value={item.quantity} onChange={e => handleInputQuantity(e.target as HTMLInputElement)} className="w-6 text-center border-2 border-green-50" />
-            //                   <span onClick={() => handleUpdateCartItemQty(1)} >+</span>
-            //             </div>
-            //             <TrashIcon className="w-7 inline ml-4 cursor-pointer" onClick={handleItemDelete} />
-            //       </div>
-            // </div>
             <div className="flex items-center">
                   <input
                         type="checkbox"

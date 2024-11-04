@@ -42,14 +42,14 @@ router.post('/register', async (req, res) => {
 router.get("/user/profile", auth, async (req, res) => {
     const id = req.user.id;
     const userData = await UserService.getUserDataById(id);
-    if (!userData) return res.sendStatus(401).json({msg: 'Something went wrong on user data'})
+    if (!userData) return res.status(401).json({msg: 'Something went wrong on user data'})
     const { name, email, user_id } = userData;
     return res.send({name, email, user_id});
 });
 
 router.get("/users/get", async (req, res) => {
     const users = await UserService.getAllUsers();
-    if (!users) return res.sendStatus(401).json({ msg: 'Something Went Wrong Getting Users'});
+    if (!users) return res.status(401).json({ msg: 'Something Went Wrong Getting Users'});
     return res.json(users);
 })
 
@@ -57,7 +57,7 @@ router.delete("/users/:userId/delete", async (req, res) => {
     const userId = req.params.userId;
     console.log("UID", userId);
     const deletedUser = await UserService.deleteUser(userId);
-    if (!deletedUser) return res.sendStatus(401).json({ msg: 'Something Went Wrong Deleting User!'});
+    if (!deletedUser) return res.status(401).json({ msg: 'Something Went Wrong Deleting User!'});
     return res.json(deletedUser);
 })
 

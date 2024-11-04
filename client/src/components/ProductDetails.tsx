@@ -7,7 +7,7 @@ import { Product } from "../types/types";
 const ProductDetails = () => {
       const { id } = useParams();
       const { products } = useProduct();
-      const [ targetProduct, setTargetProduct ] = useState<Product | null>(() => products?.find(pro => pro.id === Number(id)) || null)
+      const [ targetProduct, settargetProduct ] = useState<Product | null>(() => products?.find(pro => pro.id === Number(id)) || null)
       const [ imgUrl, setImgUrl ] = useState<string>("");
 
       useEffect(() => {
@@ -17,7 +17,7 @@ const ProductDetails = () => {
                   const url = (targetProduct.image.toString())?.includes('uploads') ? 'http://localhost:5000/' + targetProduct.image : targetProduct.image;
                   setImgUrl(url as string);
             })();
-            setTargetProduct(() => products?.find(pro => pro.id === Number(id)) || null)
+            settargetProduct(() => products?.find(pro => pro.id === Number(id)) || null)
             console.log(products)
       }, [id]);
 

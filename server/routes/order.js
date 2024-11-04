@@ -28,25 +28,30 @@ router.post("/", async (req, res) => {
 router.post("/:orderId/add", async (req, res) => {
       const orderId = req.params.orderId;
       const items = req.body;
-      if (orderId && items) {
-            OrderService.addOrderItems(orderId, req.body)
-      } 
+      if (!orderId || !items) {
+          return res.status(304).json({ msg: "" });
+      }
+      const newItems = await OrderService.addOrderItems(orderId, items);
+      return res.json(newItems);
 })
 
 router.put("/:orderId/update", async (req, res) => {
-      const orderId = req.params.orderId;
+      const { orderId } = req.params;
       const status = req.body.value;
-      console.log("ORder Id & status: ", orderId, status);
       const updatedOrder = await OrderService.updateOrderStatus(orderId, status);
-      console.log(updatedOrder);
       res.json(updatedOrder);
 })
 
 router.delete("/:orderId/delete", async (req, res) => {
       const orderId = req.params.orderId;
       const deletedOrderId = await OrderService.deleteOrder(orderId);
-      console.log("Delete Order ID: ", deletedOrderId);
       res.json(deletedOrderId);
 })
 
+router.post("/address", async (req, res) => {
+    const address = req.body;
+    const createdAddress = await OrderService.addNewAddress(address);
+    return res.json(createdAddress);
+});
+  
 export default router;

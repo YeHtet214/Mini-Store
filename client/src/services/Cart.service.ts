@@ -1,10 +1,12 @@
 import axios from "axios";
 import { getUserId } from "../helper/helper";
 
+const BASE_URL = "https://mini-store-server-production.up.railway.app";
+
 export const getCartItemsByUserId = async () => {
       console.log("Get Cart Items SErvice: ")
       const userId = getUserId();
-      const url = `http://localhost:5000/cart/${userId}/cartItems`;
+      const url = `${BASE_URL}/cart/${userId}/cartItems`;
       try {
             const response = await axios.get(url);
             return response.data;
@@ -23,7 +25,7 @@ interface reqDataType {
 
 export const updateCart = async (actionType: string,productId: number, cartItemId: number | undefined = undefined, quantity: number = 1) => {
       const reqData = {
-            baseURL: `http://localhost:5000/cart/items/update`,
+            baseURL: `${BASE_URL}/cart/items/update`,
             cartItemId,
             productId,
             userId: getUserId(),

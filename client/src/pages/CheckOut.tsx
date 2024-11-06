@@ -10,6 +10,8 @@ import { useUser } from '../context/UserContextProvider';
 import {useNavigate} from 'react-router-dom';
 import {loadStripe} from "@stripe/stripe-js";
 
+const BASE_URL = "https://mini-store-server-production.up.railway.app";
+
 const CheckOut = () => {
       const { checkOutItems } = useCart();
       const { addNewOrder, addNewOrderItems } = UseOrders();
@@ -85,7 +87,7 @@ const CheckOut = () => {
                   return setError(true);
             }
             setIsProcessing(true);
-            const { data } = await axios.post("http://localhost:5000/orders/address", { ...address, user_id: currentUser?.user_id });
+            const { data } = await axios.post(`${BASE_URL}/orders/address`, { ...address, user_id: currentUser?.user_id });
             if (data) handleProceedOrder();
       }
 

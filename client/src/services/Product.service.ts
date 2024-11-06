@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Product } from "../types/types";
 
+const BASE_URL = "https://mini-store-server-production.up.railway.app";
+
 export const getAllProductsList = async () => {
-      const url = 'http://localhost:5000/products';
+      const url = `${BASE_URL}/products`;
 
       try {
             const response = await axios.get(url);
@@ -16,7 +18,7 @@ export const getAllProductsList = async () => {
 }
 
 export const uploadNewProduct = async (data: Product) => {
-      const url = 'http://localhost:5000/products/manage/add';
+      const url = `${BASE_URL}/products/manage/add`;
 
       console.log("Upload Prodduct: ", data)
       try {
@@ -33,7 +35,7 @@ export const uploadNewProduct = async (data: Product) => {
 }
 
 export const deleteProduct = async (id: number) => {
-      const url = `http://localhost:5000/products/manage/${id}/delete`;
+      const url = `${BASE_URL}/products/manage/${id}/delete`;
       try {
             const response = await axios.delete(url)
             console.log(response.data);
@@ -46,7 +48,7 @@ export const deleteProduct = async (id: number) => {
 
 export const updateProduct = async (updatedProduct: Product) => {
       console.log(updatedProduct);
-      const url = `http://localhost:5000/products/manage/${updatedProduct.id}/update`;
+      const url = `${BASE_URL}/products/manage/${updatedProduct.id}/update`;
       try {
            const response = await axios.put(url, updatedProduct, {
                   headers: {

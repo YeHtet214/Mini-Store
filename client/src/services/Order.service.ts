@@ -2,8 +2,10 @@ import axios from "axios";
 import { getUserId } from "../helper/helper";
 import { CartItemType } from "../types/types";
 
+const BASE_URL = "https://mini-store-server-production.up.railway.app";
+
 export const getAllOrders  = async () => {
-      const url = 'http://localhost:5000/orders';
+      const url = `${BASE_URL}/orders`;
       try {
             const response = await axios.get(url);
             console.log("respnose data: ", response.data);
@@ -14,7 +16,7 @@ export const getAllOrders  = async () => {
 }
 
 export const getAllOrderItems  = async () => {
-      const url = 'http://localhost:5000/orders/items';
+      const url = `${BASE_URL}/orders/items`;
       try {
             const response = await axios.get(url);
             return response.data;
@@ -25,7 +27,7 @@ export const getAllOrderItems  = async () => {
 
 export const createOrderSummary = async (totalAmount: number) => {
       const userId = getUserId();
-      const url = "http://localhost:5000/orders";
+      const url = `${BASE_URL}/orders`;
 
       try {
             const { data } = await axios.post(url, {userId, totalAmount});
@@ -36,7 +38,7 @@ export const createOrderSummary = async (totalAmount: number) => {
 }
 
 export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
-      const url = `http://localhost:5000/orders/${orderId}/add`;
+      const url = `${BASE_URL}/orders/${orderId}/add`;
       try {
             const { data } = await axios.post(url, items);
             return data;
@@ -46,7 +48,7 @@ export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
 }
 
 export const updateOrderState = async (orderId: number, value: string) => {
-      const url = `http://localhost:5000/orders/${orderId}/update`;
+      const url = `${BASE_URL}/orders/${orderId}/update`;
       try {
             const res = await axios.put(url, { value });
             return res.data;
@@ -56,7 +58,7 @@ export const updateOrderState = async (orderId: number, value: string) => {
 }
 
 export const deleteOrder = async (orderId: number) => {
-      const url = `http://localhost:5000/orders/${orderId}/delete`;
+      const url = `${BASE_URL}/orders/${orderId}/delete`;
       try {
             const res = await axios.delete(url);
             return res.data;
@@ -67,7 +69,7 @@ export const deleteOrder = async (orderId: number) => {
 
 export const getMonthlyOrderTotal = async () => {
       try {
-            const res = await axios.get('http://localhost:5000/orders', {
+            const res = await axios.get(`${BASE_URL}/orders`, {
                   params: {
                         filter: 'month'
                   }

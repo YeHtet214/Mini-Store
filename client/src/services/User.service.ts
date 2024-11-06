@@ -2,11 +2,13 @@ import axios from "axios";
 import { AuthResponse, authType, User, userInfo } from "../types/types";
 import { jwtDecode } from "jwt-decode";
 
+const BASE_URL = "https://mini-store-server-production.up.railway.app";
+
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');
 
       const axiosInstance = axios.create({
-            baseURL: 'http://localhost:5000/auth/user',
+            baseURL: `${BASE_URL}/auth/user`,
             headers: {
                   'Authentication': token
             }
@@ -23,7 +25,7 @@ export const getCurrentUser = async () => {
 
 export const getAllUsers = async () => {
       try {
-            const res = await axios.get('http://localhost:5000/auth/users/get');
+            const res = await axios.get(`${BASE_URL}/auth/users/get`);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -32,7 +34,7 @@ export const getAllUsers = async () => {
 
 export const loginUser = async (data: userInfo) => {
       try {
-            const res = await axios.post('http://localhost:5000/auth/login', {...data});
+            const res = await axios.post(`${BASE_URL}/auth/login`, {...data});
             return res.data;
       } catch (error: any) {
             if (error.response) {
@@ -43,7 +45,7 @@ export const loginUser = async (data: userInfo) => {
 
 export const registerUser = async (data: userInfo) => {
       try {
-            const res = await axios.post('http://localhost:5000/auth/register', {...data});
+            const res = await axios.post(`${BASE_URL}/auth/register`, {...data});
             return res.data;
       } catch (error) {
             console.log(error);
@@ -77,7 +79,7 @@ export const authenticateUser = async ({userInput, authType="login", handleRespo
 
 export const createNewUser = async (user: User) => {
       try {
-            const res = await axios.post('http://localhost:5000/manageUsers/users/create', user);
+            const res = await axios.post(`${BASE_URL}/manageUsers/users/create`, user);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -86,7 +88,7 @@ export const createNewUser = async (user: User) => {
 
 export const updateUser = async (user: User) => {
       try {
-            const res = await axios.put(`http://localhost:5000/manageUsers/users/${user.user_id}/update`, user);
+            const res = await axios.put(`${BASE_URL}/manageUsers/users/${user.user_id}/update`, user);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -95,7 +97,7 @@ export const updateUser = async (user: User) => {
 
 export const deleteUser = async (userId: number) => {
       try {
-            const res = await axios.delete(`http://localhost:5000/auth/users/${userId}/delete`);
+            const res = await axios.delete(`${BASE_URL}/auth/users/${userId}/delete`);
             return res.data;
       } catch (error) {
             console.log(error);

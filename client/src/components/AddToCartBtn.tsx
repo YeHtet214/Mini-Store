@@ -10,7 +10,6 @@ interface Props {
 
 const AddToCartBtn = ({ productId }: Props) => {
       const { cartItems } = useCart();
-      // const [cartItem, setCartItem] = useState();
       const { setCartItems } = useCart();
 
       const handleCartUpdate = async (e: MouseEvent<HTMLSpanElement>) => {

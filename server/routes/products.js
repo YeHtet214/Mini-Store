@@ -36,9 +36,7 @@ router.put('/manage/:id/update', upload.single('image'), async (req, res) => {
 // Delete Product Route
 router.delete('/manage/:id/delete', async (req, res) => {
       const productId = req.params.id;
-      console.log("Product Id: ", productId);
       const deletedProduct = await ProductService.deletedProduct(productId);
-      console.log(deletedProduct);
       deletedProduct ? res.json(deletedProduct) : res.json({ msg: "Can't Delete the Product!"});
 })
 

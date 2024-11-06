@@ -1,11 +1,9 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as UserServices from "../services/User.service";
 import { useUser } from "../context/UserContextProvider";
-import { AuthResponse, userInfo } from "../types/types";
+import { userInfo } from "../types/types";
 import { AlertCircle, Lock, Mail } from "lucide-react";
-
-const authType = "register";
 
 const Form = () => {
       const [userInput, setUserInput] = useState<userInfo>({ name: '', email: '', password: ''});
@@ -98,7 +96,7 @@ const Form = () => {
                               type="submit"
                               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                               >
-                              Sign in
+                              Register
                         </button>
                   </div>
                   {error && (

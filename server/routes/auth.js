@@ -55,7 +55,6 @@ router.get("/users/get", async (req, res) => {
 
 router.delete("/users/:userId/delete", async (req, res) => {
     const userId = req.params.userId;
-    console.log("UID", userId);
     const deletedUser = await UserService.deleteUser(userId);
     if (!deletedUser) return res.status(401).json({ msg: 'Something Went Wrong Deleting User!'});
     return res.json(deletedUser);
@@ -73,14 +72,12 @@ router.get(
     passport.authenticate("google", {
         failureRedirect: "http://localhost:5173/login"
     }), (req, res, next) => {
-        console.log("Logging from the google callback: ", req.user);
         next();
     },
     async (req, res) => {
         const user = req.user;
         try {
             const role = user.email === "yhtet1934@gmail.com" ? 'admin' : 'user'; // for initial admin setup
-            console.log("User Data: ", user)
             const isUserExist = await UserService.getUserByEmail(user.email);
             if (isUserExist) {
                 const { token, user_id } = await UserService.authenticateUser(user.email, user.password)
@@ -110,7 +107,6 @@ passport.use(
                 const user = { name: profile.displayName, email: profile.email, password: profile.id }
                 cb(null, user);
             } catch (err) {
-                console.log(err);
                 cb(err);
             }
         }

@@ -25,35 +25,6 @@ const Header = () => {
       }, [pathname]);
 
       return (
-            // <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 w-full border-b-2" >
-            //       <div className="container flex items-center mx-auto py-4 gap-6 text-lg font-bold text-gray-700">
-            //             <Link to="/" className="flex-1"><Store className="text-indigo-500" size={30}/></Link>
-                        
-            //             { isAdmin ? 
-            //                   <Link to="/admin/dashboard">Dashboard</Link> :
-            //                   <Link to="/cart" className="">
-            //                         <ShoppingCartIcon className="w-6" />
-            //                         {totalQtyInCart > 0 && <span>{totalQtyInCart}</span>}
-            //                   </Link>
-            //             }
-                        
-            //             {
-            //                   isLoggedIn ?
-            //                   <Link to="/auth/profile" className="flex items-center gap-2 border-l-2 pl-2 border-violet-500 text-sm font-medium">
-            //                         <UserIcon className="w-6" />
-            //                         <h3>{currentUser?.name}</h3>
-            //                   </Link> :
-            //                   <Link to="/auth/login">
-            //                         <button
-            //                               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-100 bg-indigo-500 hover:text-indigo-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            //                         >
-            //                               Login
-            //                         </button>
-            //                   </Link>
-            //             }
-            //       </div>
-                  
-            // </div>
             <header className="bg-white shadow">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 gap-6 flex justify-between items-center">
                   <Link to="/" className="flex-grow flex items-center">

@@ -130,7 +130,7 @@ const SalesOverview = () => {
 
     const totalSalesAmount = useMemo(() => {
         return orders
-                .filter(order => order.status === "completed")
+                .filter(order => order.status === "Processing")
                 .reduce((acc, { total_amount }) => Number(acc) + Number(total_amount), 0);
     }, [orders]);
 

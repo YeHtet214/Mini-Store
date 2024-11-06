@@ -107,9 +107,14 @@ export const isAuthenticated = () => {
       try {
             return token ? jwtDecode(token) : false;
       } catch(error) {
-            console.log(error);
             return false;
       }
+}
+
+interface JwtPayload {
+      iat: number;
+      id: number;
+      role: string;
 }
 
 export const hasRole = (role: string) => {
@@ -117,10 +122,9 @@ export const hasRole = (role: string) => {
       if (!token) return false;
 
       try {
-            const decodedToken = jwtDecode(token);
-            return decodedToken.user.role === role;
+            const decodedToken = jwtDecode<JwtPayload>(token);
+            return decodedToken.role === role;
       } catch(error) {
-            console.log(error);
             return false;
       }
 }

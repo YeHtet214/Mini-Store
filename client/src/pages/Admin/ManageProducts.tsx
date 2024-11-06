@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useProduct } from "../../context/ProductContextProvider";
 import { Product } from "../../types/types";
 import { PlusIcon, PencilIcon, TrashIcon, Search, XIcon } from 'lucide-react'
@@ -210,10 +210,6 @@ const openModal = (type: "Create" | "Update", id?: number) => {
     setCurrentProduct(null)
     setIsModalOpen(false)
   }
-
-const handleSorting = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedType(event.target.value);
-}
 
 const handleDeleteProduct = async (id: number) => {
     const deletedProduct = await ProductServices.deleteProduct(id);

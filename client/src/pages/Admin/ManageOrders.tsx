@@ -5,7 +5,6 @@ import { Order, OrderItemType } from "../../types/types";
 
 import { Search, ChevronLeft, ChevronRight, Eye, Trash2, RefreshCw } from 'lucide-react'
 import { currency } from "../../helper/helper";
-import { debounce } from "chart.js/helpers";
 
 const statusColors = {
   Pending: 'bg-yellow-100 text-yellow-800',

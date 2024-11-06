@@ -3,7 +3,7 @@ import CartItem from "../components/CartItem";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartItemType } from "../types/types";
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react'
+import { ShoppingBag } from 'lucide-react'
 import { currency } from "../helper/helper";
 
 const Cart = () => {

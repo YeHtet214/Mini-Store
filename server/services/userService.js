@@ -78,13 +78,10 @@ export const authenticateUser = async (email, enterPassword) => {
             throw new Error("Incorrect Password")
       }
       const payload = {
-            user: {
-                  id: userData.user_id,
-                  role: userData.email === "yhtet1934@gmail.com" ? "admin" : userData.role === "admin" ? "admin" : "user"
-            }
+            id: userData.user_id,
+            role: userData.email === "yhtet1934@gmail.com" ? "admin" : userData.role === "admin" ? "admin" : "user"
       }
       const token = jwt.sign(payload, jwt_secret);
-      console.log("Token: ", token);
       return {token, user_id: userData.user_id};
 }
 
@@ -105,7 +102,7 @@ export const deleteUser = async (userId) => {
 export const createNewUserByAdmin = async ({ name, email, password, role}) => {
       try {
             const existingUser = await getUserData(email);
-            if (existingUser) throw new Error("User already exist!");
+            if (existingUser) res.sendStatus(303);
             const hash = await bcrypt.hash(password, ROUND_SALT);
             const newUser = await client.query(
                   `INSERT INTO users (name, email, password, role) 

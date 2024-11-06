@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContextProvider";
-import { Edit, LogOut, Mail, User } from "lucide-react";
+import { LogOut, Mail, User } from "lucide-react";
 
 const Profile = () => {
       const { currentUser, setIsLoggedIn } = useUser();

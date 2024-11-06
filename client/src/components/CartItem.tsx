@@ -2,7 +2,7 @@ import { CartItemType } from '../types/types';
 import * as CartServices from '../services/Cart.service';
 import { currency } from '../helper/helper';
 import { useCart } from '../context/CartContextProvider';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 
 interface CartItemProps {

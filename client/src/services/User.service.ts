@@ -3,7 +3,7 @@ import { AuthResponse, authType, User, userInfo } from "../types/types";
 import { jwtDecode } from "jwt-decode";
 
 // const BASE_URL = "https://mini-store-server-production.up.railway.app";
-const BASE_URL = "https://mini-store-api-theta.vercel.app/";
+const BASE_URL = "https://mini-store-api-theta.vercel.app";
 
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');

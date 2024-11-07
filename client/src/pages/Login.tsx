@@ -21,7 +21,7 @@ export default function LoginPage() {
                                     </div>
                               </div>
 
-                              <form className="mt-6" method="POST" action="http://localhost:5000/auth/google">
+                              <form className="mt-6" method="POST" action="https://mini-store-api-theta.vercel.app/auth/google">
                                     <button
                                     type="submit"
                                     className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -48,7 +48,7 @@ export default function LoginPage() {
                               </div>
 
                               <div className="mt-6">
-                                    <Link  to="/auth/register" >
+                                    <Link  to="https://mini-store-api-theta.vercel.app/auth/register" >
                                           <button
                                                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                           >

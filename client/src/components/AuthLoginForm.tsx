@@ -24,7 +24,6 @@ const Form = () => {
 
       const handleSubmit = async (e: FormEvent) => {
             e.preventDefault();
-            console.log("LOgin data: ", userInput);
 
             const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
             if (isAuthenticate) {

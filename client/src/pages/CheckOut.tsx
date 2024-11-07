@@ -11,7 +11,7 @@ import {useNavigate} from 'react-router-dom';
 import {loadStripe} from "@stripe/stripe-js";
 
 // const BASE_URL = "https://mini-store-server-production.up.railway.app";
-const BASE_URL = "https://mini-store-api-theta.vercel.app/";
+const BASE_URL = "https://mini-store-api-theta.vercel.app";
 
 const CheckOut = () => {
       const { checkOutItems } = useCart();

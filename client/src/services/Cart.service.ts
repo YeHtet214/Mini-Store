@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getUserId } from "../helper/helper";
 
-const BASE_URL = "https://mini-store-server-production.up.railway.app";
+// const BASE_URL = "https://mini-store-server-production.up.railway.app";
+const BASE_URL = "https://mini-store-api-theta.vercel.app/";
 
 export const getCartItemsByUserId = async () => {
       console.log("Get Cart Items SErvice: ")

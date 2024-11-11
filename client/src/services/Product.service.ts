@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Product } from "../types/types";
 
-// const BASE_URL = "https://mini-store-server-production.up.railway.app";
-const BASE_URL = "https://mini-store-api-theta.vercel.app/api";
+const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getAllProductsList = async () => {
       const url = `${BASE_URL}/products`;

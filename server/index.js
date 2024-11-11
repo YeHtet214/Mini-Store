@@ -41,4 +41,4 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/manageUsers', userManagementRoutes);
 app.use('/api', apiRoutes);
 
-export default app;
+app.listen(PORT, () => console.log("Server is running on port", PORT))

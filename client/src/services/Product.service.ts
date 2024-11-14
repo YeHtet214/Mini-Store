@@ -4,13 +4,14 @@ import { Product } from "../types/types";
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getAllProductsList = async () => {
-      const url = `${BASE_URL}/products`;
+      const url = `${BASE_URL}/manageProducts`;
 
       try {
             const response = await axios.get(url);
             if (!response.data) {
                   console.log("Something went wrong while fetching products!");
             }
+            console.log(response.data, "product list");
             return response.data as Product[];
       } catch (error) {
             console.log(error);
@@ -18,9 +19,9 @@ export const getAllProductsList = async () => {
 }
 
 export const uploadNewProduct = async (data: Product) => {
-      const url = `${BASE_URL}/products/manage/add`;
+      const url = `${BASE_URL}/manageProducts`;
 
-      console.log("Upload Prodduct: ", data)
+      console.log("Upload Product: ", data)
       try {
             const response = await axios.post(url, data, {
                   headers: {
@@ -35,7 +36,7 @@ export const uploadNewProduct = async (data: Product) => {
 }
 
 export const deleteProduct = async (id: number) => {
-      const url = `${BASE_URL}/products/manage/${id}/delete`;
+      const url = `${BASE_URL}/manageProducts?id=${id}`;
       try {
             const response = await axios.delete(url)
             console.log(response.data);
@@ -48,7 +49,7 @@ export const deleteProduct = async (id: number) => {
 
 export const updateProduct = async (updatedProduct: Product) => {
       console.log(updatedProduct);
-      const url = `${BASE_URL}/products/manage/${updatedProduct.id}/update`;
+      const url = `${BASE_URL}/manageProducts?id=${updatedProduct.id}`;
       try {
            const response = await axios.put(url, updatedProduct, {
                   headers: {

@@ -61,7 +61,7 @@ router.delete("/users/:userId/delete", async (req, res) => {
 })
 
 router.post(
-    "/google", 
+    "/google",
     passport.authenticate("google", {
         scope: ["profile", "email"],
     })

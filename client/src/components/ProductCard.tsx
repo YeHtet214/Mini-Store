@@ -9,7 +9,7 @@ interface Props {
 
 const ProductCard = ({ product }: Props) => {
       const { id, name, image } = product;
-      const [prodctImg, setProductImg] = useState<string>('');
+      const [productImg, setProductImg] = useState<string>('');
 
       useEffect(() => {
             const imgUrl = (image as string)?.includes('uploads') ? 'http://localhost:5000/' + image : image as string;
@@ -20,7 +20,7 @@ const ProductCard = ({ product }: Props) => {
             <Link to={`/products/${id}/detail`} >
                   <div className="shadow-md p-4 border-r-2 cursor-pointer">
                         <div className="flex flex-col justify-between h-full">
-                              <img src={prodctImg} alt="" className="h-48 mx-auto object-contain" />
+                              <img src={productImg} alt="" className="h-48 mx-auto object-contain" />
                               <h5 className="my-2 flex-1">{name}</h5>
                               <AddToCartBtn productId={id} />
                         </div>

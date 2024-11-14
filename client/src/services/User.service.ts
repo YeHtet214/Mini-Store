@@ -6,16 +6,16 @@ const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');
+      console.log("token", token);
 
       const axiosInstance = axios.create({
-            baseURL: `${BASE_URL}/auth/user`,
             headers: {
-                  'Authentication': token
+                  'Authorization': `Bearer ${token}`
             }
       });
 
       try {
-            const res = await axiosInstance.get(`/profile`);
+            const res = await axiosInstance.get(`${BASE_URL}/userProfile`);
             console.log("Current User: ", res.data)
             return res.data;
       } catch (error) {
@@ -25,7 +25,7 @@ export const getCurrentUser = async () => {
 
 export const getAllUsers = async () => {
       try {
-            const res = await axios.get(`${BASE_URL}/auth/users/get`);
+            const res = await axios.get(`${BASE_URL}/manageUsers`);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -34,18 +34,19 @@ export const getAllUsers = async () => {
 
 export const loginUser = async (data: userInfo) => {
       try {
-            const res = await axios.post(`${BASE_URL}/auth/login`, {...data});
+            const res = await axios.post(`${BASE_URL}/login`, {...data});
             return res.data;
       } catch (error: any) {
             if (error.response) {
                   return error.response.data;
             }
-      }
+      }w
 }
 
 export const registerUser = async (data: userInfo) => {
+      console.log("Registering user: ", data);
       try {
-            const res = await axios.post(`${BASE_URL}/auth/register`, {...data});
+            const res = await axios.post(`${BASE_URL}/register`, {...data});
             return res.data;
       } catch (error) {
             console.log(error);
@@ -79,7 +80,7 @@ export const authenticateUser = async ({userInput, authType="login", handleRespo
 
 export const createNewUser = async (user: User) => {
       try {
-            const res = await axios.post(`${BASE_URL}/manageUsers/users/create`, user);
+            const res = await axios.post(`${BASE_URL}/manageUsers`, user);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -88,7 +89,7 @@ export const createNewUser = async (user: User) => {
 
 export const updateUser = async (user: User) => {
       try {
-            const res = await axios.put(`${BASE_URL}/manageUsers/users/${user.user_id}/update`, user);
+            const res = await axios.put(`${BASE_URL}/manageUsers`, user);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -97,7 +98,7 @@ export const updateUser = async (user: User) => {
 
 export const deleteUser = async (userId: number) => {
       try {
-            const res = await axios.delete(`${BASE_URL}/auth/users/${userId}/delete`);
+            const res = await axios.delete(`${BASE_URL}/manageUsers`, { data: { userId } });
             return res.data;
       } catch (error) {
             console.log(error);

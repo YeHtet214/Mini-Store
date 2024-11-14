@@ -29,7 +29,10 @@ const UserContext = createContext<UserContextType>(defaultUserContext);
 const UserProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       const [currentUser, setCurrentUser] = useState<User>(); //  {token: localStorage.getItem('token') ,user_id:  Number(localStorage.getItem('user_id'))}
       const [users, setUsers] = useState<User[]>([]);
-      const [isLoggedIn, setIsLoggedIn] = useState<boolean>(localStorage.getItem('token') ? true : false);
+      const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+            const user = JSON.stringify(localStorage.getItem('token'));
+            return !!user;
+      });
 
       useEffect(() => {
             if (isLoggedIn) {

@@ -5,7 +5,7 @@ import { CartItemType } from "../types/types";
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getAllOrders  = async () => {
-      const url = `${BASE_URL}/orders`;
+      const url = `${BASE_URL}/manageOrders`;
       try {
             const response = await axios.get(url);
             console.log("respnose data: ", response.data);
@@ -16,7 +16,7 @@ export const getAllOrders  = async () => {
 }
 
 export const getAllOrderItems  = async () => {
-      const url = `${BASE_URL}/orders/items`;
+      const url = `${BASE_URL}/manageOrderItems`;
       try {
             const response = await axios.get(url);
             return response.data;
@@ -27,7 +27,7 @@ export const getAllOrderItems  = async () => {
 
 export const createOrderSummary = async (totalAmount: number) => {
       const userId = getUserId();
-      const url = `${BASE_URL}/orders`;
+      const url = `${BASE_URL}/manageOrders`;
 
       try {
             const { data } = await axios.post(url, {userId, totalAmount});

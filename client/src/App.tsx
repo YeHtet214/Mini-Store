@@ -41,7 +41,7 @@ const App = () => {
                               <Route path="/auth/login" element={<Login />} />
                               <Route path="/auth/register" element={<Register />} />
                               <Route path="/success" element={<Success />} />
-                              <Route path="cancel" element={<Cancel />} />
+                              <Route path="/cancel" element={<Cancel />} />
                               <Route path="*" element={<p>There's NOTHING here! 404.</p>} />
                         </Routes>
                   </div>

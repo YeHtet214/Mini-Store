@@ -23,10 +23,10 @@ const Register = () => {
                   <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
                               <Form/>
-                              <form className="mt-6" onSubmit={handleGoogle}>
+                              <Link to="https://ministore-server.vercel.app/api/google" >
                                     <button
                                         type="submit"
-                                        className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                        className="w-full flex items-center justify-center mt-6 px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                     >
                                           <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                                                 <path
@@ -36,7 +36,7 @@ const Register = () => {
                                           </svg>
                                           Sign up with Google
                                     </button>
-                              </form>
+                              </Link>
 
                               <div className="mt-6">
                                     <div className="relative">

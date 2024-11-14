@@ -5,8 +5,8 @@ const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getCartItemsByUserId = async () => {
       console.log("Get Cart Items SErvice: ")
-      const userId = getUserId();
-      const url = `${BASE_URL}/cart/${userId}/cartItems`;
+      const user_id = getUserId();
+      const url = `${BASE_URL}/cartItems?user_id=${user_id}`;
       try {
             const response = await axios.get(url);
             return response.data;
@@ -25,7 +25,7 @@ interface reqDataType {
 
 export const updateCart = async (actionType: string,productId: number, cartItemId: number | undefined = undefined, quantity: number = 1) => {
       const reqData = {
-            baseURL: `${BASE_URL}/cart/items/update`,
+            baseURL: `${BASE_URL}/manageCartItems`,
             cartItemId,
             productId,
             userId: getUserId(),
@@ -46,9 +46,10 @@ export const updateCart = async (actionType: string,productId: number, cartItemI
       return res;
 }
 
-async function createNewCartItem(reqData: reqDataType) {
+async function createNewCartItem(data: reqDataType) {
       try {
-            const res = await axios.post(reqData.baseURL, {data: reqData});
+            console.log(data);
+            const res = await axios.post(data.baseURL, data);
             return res.data;
       } catch (error) {
             console.log(error);

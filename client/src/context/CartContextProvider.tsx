@@ -41,7 +41,7 @@ const CartContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       }, [isLoggedIn]);
 
       useEffect(() => {
-            if (cartItems.length > 0) {
+            if (cartItems?.length > 0) {
                   localStorage.setItem('cartItems', JSON.stringify(cartItems));
             } else {
                   localStorage.removeItem('cartItems');
@@ -49,7 +49,7 @@ const CartContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       }, [cartItems])
 
       useEffect(() => {
-            if (cartItems?.length === 0 || !isLoggedIn) {
+            if (!cartItems?.length || !isLoggedIn) {
                   setTotalQtyInCart(0);
                   return;
             }

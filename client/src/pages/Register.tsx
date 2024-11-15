@@ -5,6 +5,16 @@ import axios from "axios";
 
 const Register = () => {
 
+      const handleGoogle = async (e: FormEvent) => {
+            e.preventDefault();
+            try {
+                  const response = await axios.get("https://ministore-server.vercel.app/api/google")
+                  console.log(response.status);
+            } catch (err) {
+                  console.log(err)
+            }
+      }
+
       return (
             <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
                   <div className="sm:mx-auto sm:w-full sm:max-w-md">

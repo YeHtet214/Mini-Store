@@ -40,7 +40,7 @@ export const loginUser = async (data: userInfo) => {
             if (error.response) {
                   return error.response.data;
             }
-      }
+      }w
 }
 
 export const registerUser = async (data: userInfo) => {

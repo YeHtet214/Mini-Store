@@ -25,7 +25,7 @@ interface reqDataType {
 
 export const updateCart = async (actionType: string,productId: number, cartItemId: number | undefined = undefined, quantity: number = 1) => {
       const reqData = {
-            baseURL: `${BASE_URL}/manageCartItems`,
+            baseURL: `${BASE_URL}/cartItems`,
             cartItemId,
             productId,
             userId: getUserId(),

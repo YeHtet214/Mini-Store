@@ -4,7 +4,7 @@ import { Product } from "../types/types";
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getAllProductsList = async () => {
-      const url = `${BASE_URL}/manageProducts`;
+      const url = `${BASE_URL}/products`;
 
       try {
             const response = await axios.get(url);
@@ -19,7 +19,7 @@ export const getAllProductsList = async () => {
 }
 
 export const uploadNewProduct = async (data: Product) => {
-      const url = `${BASE_URL}/manageProducts`;
+      const url = `${BASE_URL}/products`;
 
       console.log("Upload Product: ", data)
       try {
@@ -36,7 +36,7 @@ export const uploadNewProduct = async (data: Product) => {
 }
 
 export const deleteProduct = async (id: number) => {
-      const url = `${BASE_URL}/manageProducts?id=${id}`;
+      const url = `${BASE_URL}/products?id=${id}`;
       try {
             const response = await axios.delete(url)
             console.log(response.data);
@@ -49,7 +49,7 @@ export const deleteProduct = async (id: number) => {
 
 export const updateProduct = async (updatedProduct: Product) => {
       console.log(updatedProduct);
-      const url = `${BASE_URL}/manageProducts?id=${updatedProduct.id}`;
+      const url = `${BASE_URL}/products?id=${updatedProduct.id}`;
       try {
            const response = await axios.put(url, updatedProduct, {
                   headers: {

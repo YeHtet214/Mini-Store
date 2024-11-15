@@ -5,10 +5,10 @@ import { CartItemType } from "../types/types";
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getAllOrders  = async () => {
-      const url = `${BASE_URL}/manageOrders`;
+      const url = `${BASE_URL}/orders`;
       try {
             const response = await axios.get(url);
-            console.log("respnose data: ", response.data);
+            console.log("response data: ", response.data);
             return response.data;
       } catch (error) {
             console.log(error);
@@ -16,7 +16,7 @@ export const getAllOrders  = async () => {
 }
 
 export const getAllOrderItems  = async () => {
-      const url = `${BASE_URL}/manageOrderItems`;
+      const url = `${BASE_URL}/orderItems`;
       try {
             const response = await axios.get(url);
             return response.data;
@@ -27,7 +27,7 @@ export const getAllOrderItems  = async () => {
 
 export const createOrderSummary = async (totalAmount: number) => {
       const userId = getUserId();
-      const url = `${BASE_URL}/manageOrders`;
+      const url = `${BASE_URL}/orders`;
 
       try {
             const { data } = await axios.post(url, {userId, totalAmount});
@@ -38,7 +38,7 @@ export const createOrderSummary = async (totalAmount: number) => {
 }
 
 export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
-      const url = `${BASE_URL}/orders/${orderId}/add`;
+      const url = `${BASE_URL}/orderItems?orderId=${orderId}`;
       try {
             const { data } = await axios.post(url, items);
             return data;
@@ -48,7 +48,7 @@ export const addOrderItems = async (orderId: number, items: CartItemType[]) => {
 }
 
 export const updateOrderState = async (orderId: number, value: string) => {
-      const url = `${BASE_URL}/orders/${orderId}/update`;
+      const url = `${BASE_URL}/orders?orderId=${orderId}`;
       try {
             const res = await axios.put(url, { value });
             return res.data;

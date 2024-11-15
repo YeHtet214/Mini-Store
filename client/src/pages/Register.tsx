@@ -1,19 +1,7 @@
 import Form from "../components/AuthRegisterForm";
 import {Link} from "react-router-dom";
-import {FormEvent} from "react";
-import axios from "axios";
 
 const Register = () => {
-
-      const handleGoogle = async (e: FormEvent) => {
-            e.preventDefault();
-            try {
-                  const response = await axios.get("https://ministore-server.vercel.app/api/google")
-                  console.log(response.status);
-            } catch (err) {
-                  console.log(err)
-            }
-      }
 
       return (
             <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -50,7 +38,7 @@ const Register = () => {
                                     </div>
 
                                     <div className="mt-6">
-                                          <Link to="https://mini-store-omega.vercel.app/auth/login">
+                                          <Link to="/auth/login">
                                                 <button
                                                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                                 >

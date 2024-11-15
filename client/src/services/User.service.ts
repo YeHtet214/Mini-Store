@@ -25,7 +25,7 @@ export const getCurrentUser = async () => {
 
 export const getAllUsers = async () => {
       try {
-            const res = await axios.get(`${BASE_URL}/manageUsers`);
+            const res = await axios.get(`${BASE_URL}/users`);
             return res.data;
       } catch (error) {
             console.log(error);
@@ -36,11 +36,11 @@ export const loginUser = async (data: userInfo) => {
       try {
             const res = await axios.post(`${BASE_URL}/login`, {...data});
             return res.data;
-      } catch (error: any) {
+      } catch (error) {
             if (error.response) {
                   return error.response.data;
             }
-      }w
+      }
 }
 
 export const registerUser = async (data: userInfo) => {

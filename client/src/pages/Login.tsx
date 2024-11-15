@@ -1,15 +1,7 @@
 import { Link } from "react-router-dom";
 import Form from "../components/AuthLoginForm";
-import {FormEvent} from "react";
-import axios from "axios";
 
 export default function LoginPage() {
-
-      // const handleGoogle = async (e: FormEvent) => {
-      //       e.preventDefault();
-      //       const response = await axios.get("https://ministore-server.vercel.app/api/google")
-      //       console.log(response.status);
-      // }
   
   return (
       <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">

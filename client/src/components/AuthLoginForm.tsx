@@ -28,7 +28,7 @@ const Form = () => {
             const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
             if (isAuthenticate) {
                   setIsLoggedIn(true);
-                  UserServices.getCurrentUser().then(data => setCurrentUser(data));
+                  // UserServices.getCurrentUser().then(data => setCurrentUser(data));
                   navigate('/');
             }
       }

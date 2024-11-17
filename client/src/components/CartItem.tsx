@@ -4,6 +4,7 @@ import { currency } from '../helper/helper';
 import { useCart } from '../context/CartContextProvider';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Minus, Plus, Trash2 } from 'lucide-react';
+import LoadingDots from "./LoadingDots.tsx";
 
 interface CartItemProps {
       item: CartItemType;
@@ -15,6 +16,7 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
       const { cartItems, setCartItems } = useCart();
       const [checkout, setCheckOut] = useState<boolean>(false);
       const [productImg, setProductImg] = useState<string>('');
+      const [isLoading, setIsLoading] = useState<boolean>(false);
 
       useEffect(() => {
             // Format the image URL if it's created by admin
@@ -27,17 +29,27 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
       }, [cartItems]);
 
       const handleUpdateCartItemQty = async (qty: number) => {
-            const newQty = item.quantity + qty;
-            if (newQty < 1) return;
-            const updateCartItems = await CartServices.updateCart('updateCartItemQty',item.product_id, item.id, newQty);
-            setCartItems(updateCartItems);
+            setIsLoading(true);
+            try {
+                  const newQty = item.quantity + qty;
+                  if (newQty < 1) return;
+                  const updateCartItems = await CartServices.updateCart('updateCartItemQty',item.product_id, item.id, newQty);
+                  setCartItems(updateCartItems);
+            } finally {
+                  setIsLoading(false);
+            }
       }
 
       const handleItemDelete = async () => {
-            const updateCartItems = await CartServices.updateCart('deleteCartItem',item.product_id, item.id, item.id);
-            setCartItems(updateCartItems);
-            // Once the item is removed from the cart, also remove from the checkout if exist in checkout list;
-            setItemList(prevCheckOutItems => prevCheckOutItems.filter(existingItem => existingItem.product_id !== item.product_id));
+            setIsLoading(true);
+            try {
+                  const updateCartItems = await CartServices.updateCart('deleteCartItem',item.product_id, item.id, item.id);
+                  setCartItems(updateCartItems);
+                  // Once the item is removed from the cart, also remove from the checkout if exist in checkout list;
+                  setItemList(prevCheckOutItems => prevCheckOutItems.filter(existingItem => existingItem.product_id !== item.product_id));
+            } finally {
+                  setIsLoading(false);
+            }
       }
 
       const handleSelectItem = (selected: boolean) => {
@@ -53,11 +65,10 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
                   });
       }
 
-      // const handleCheckBoxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      //       handleSelect(e.target.checked);
-      // }
-
       if (!item) return;
+
+      if (isLoading) return <LoadingDots />
+
       return (
             <div className="flex items-center">
                   <input

@@ -11,11 +11,6 @@ const Cart = () => {
       const navigate = useNavigate();
       const [selectedList, setSelectedList] = useState<CartItemType[] | []>([]);
 
-      useEffect(() => {
-            console.log("Cart Items in CArt Page: ", cartItems);
-      })
-
-
       useEffect(() => setCheckOutItems(selectedList), [selectedList]);
       
       const calculateOrderSummary = () => {
@@ -38,22 +33,6 @@ const Cart = () => {
       }
 
       return (
-            // <div className="flex space-x-4">
-            //       <div>
-            //             {cartItems?.length > 0 ? cartItems.map(item => (
-            //                   <CartItem key={item?.id} item={item} itemList={selectedList} setItemList={(items) => setSelectedList(items)} />
-            //             )) : (
-            //                   <div>There is no item in the cart. Continue Shopping!</div>
-            //             )}
-            //       </div>
-            //       <div className="flex flex-col justify-between shadow-sm rounded w-2/5 h-60">
-            //             <p>
-            //                   <span>Subtotal({ orderSummary.noOfItems } items)</span>
-            //                   <span className="float-end">$ { (orderSummary.subTotal).toFixed(2) }</span>
-            //             </p>
-            //             <button className="border-2 border-violet-500 px-2" onClick={handleCheckOut}>Checkout</button>
-            //       </div>
-            // </div>
             <div className="min-h-screen bg-gray-100 py-8">
                   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex items-center justify-between mb-8">
@@ -68,10 +47,10 @@ const Cart = () => {
                               <div className="lg:w-2/3">
                                     <div className="bg-white rounded-lg shadow">
                                           {cartItems.length === 0 ? (
-                                          <div className="p-8 text-center">
-                                                <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
-                                                <p className="mt-4 text-gray-500">Your cart is empty</p>
-                                          </div>
+                                                <div className="p-8 text-center">
+                                                      <ShoppingBag className="mx-auto h-12 w-12 text-gray-400" />
+                                                      <p className="mt-4 text-gray-500">Your cart is empty</p>
+                                                </div>
                                           ) : (
                                           <ul className="divide-y divide-gray-200">
                                                 {cartItems.map((item) => (

@@ -8,7 +8,7 @@ import { AlertCircle, Lock, Mail } from "lucide-react";
 const Form = () => {
       const [userInput, setUserInput] = useState<userInfo>({ name: '', email: '', password: ''});
       const [error, setError] = useState<string>('');
-      const { setIsLoggedIn, setCurrentUser } = useUser();
+      const { setIsLoggedIn } = useUser();
       const navigate = useNavigate();
 
       const handleResponse = (response: AuthResponse): boolean => {

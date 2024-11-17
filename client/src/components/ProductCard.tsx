@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Product } from "../types/types";
 import AddToCartBtn from "./AddToCartBtn";
 import { useEffect, useState } from "react";
-import {StarIcon, ShoppingCartIcon, HeartIcon} from "lucide-react";
+import {StarIcon, HeartIcon} from "lucide-react";
 import {currency} from "../helper/helper.ts";
 
 interface Props {
@@ -40,10 +40,10 @@ const ProductCard = ({ product }: Props) => {
                       <div className="relative">
                             <img
                                 src={productImg}
-                                alt={product.name}
+                                alt={name}
                                 className="w-full h-64 object-contain"
                             />
-                            {hoveredProduct === product.id && (
+                            {hoveredProduct === id && (
                                 <div className="absolute top-4 right-4 space-y-2">
                                       <button
                                           className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors">
@@ -61,7 +61,7 @@ const ProductCard = ({ product }: Props) => {
                       <div className="p-6">
                             <div className="flex items-center justify-between mb-2">
                                   <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
-                                        {product.name}
+                                        {name}
                                   </h3>
                                   <div className="flex items-center">
                                         <StarIcon className="h-5 w-5 text-yellow-400 fill-current"/>

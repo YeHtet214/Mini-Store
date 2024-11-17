@@ -11,7 +11,7 @@ const ProductsList = () => {
             // For OAuth Authenticated Users return the token & user_id from the url 
             const queryParams = new URLSearchParams(window.location.search); 
             const token = queryParams.get("token");
-            const user_id = queryParams.get("uer_id");
+            const user_id = queryParams.get("user_id");
 
             console.log(user_id, token, "query params");
 
@@ -21,7 +21,7 @@ const ProductsList = () => {
                   localStorage.setItem("user_id", user_id);
                   setIsLoggedIn(true);
             }
-      }, [setIsLoggedIn]);
+      }, []);
 
       if (isLoading) return <h1>Loading...</h1>
 

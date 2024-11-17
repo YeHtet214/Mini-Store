@@ -51,7 +51,7 @@ export default function LoginPage() {
                               </div>
 
                               <div className="mt-6">
-                                    <Link to="http://localhost:5173/auth/register">
+                                    <Link to="/auth/register">
                                           <button
                                               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-indigo-600 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                                           >

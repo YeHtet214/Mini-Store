@@ -81,7 +81,7 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
                         <img
                               src={productImg}
                               alt={item.name}
-                              className="h-16 w-16 rounded-md object-cover"
+                              className="h-16 w-16 rounded-md object-contain"
                         />
                   </div>
                   <div className="ml-6 flex-1">

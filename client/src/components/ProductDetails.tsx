@@ -22,21 +22,22 @@ const ProductDetails = () => {
       if (!targetProduct) return <h1>Target Product Not Exist!</h1>
 
       return (
-            <div className="container bg-white py-10">
-                 { imgUrl && (
-                        <div className="grid grid-rows-2 md:grid-cols-2 gap-4">
-                              <img src={imgUrl} alt={`${imgUrl}, image`} className="object-contain w-1/2 mx-auto" />
-                              <div className="flex-1">
-                                    <h2 className="font-semibold text-2xl text-gray-700 mb-2">{targetProduct.name}</h2>
-                                    <p>{targetProduct.description}</p>
-                                    <div className="flex justify-between items-center mt-2 border-t-2 border-gray-500 gap-4 pt-4">
-                                          <i className="text-xl"><em><b>${targetProduct.price}</b></em></i>
-                                          <AddToCartBtn productId={targetProduct.id} />
-                                    </div>
-                              </div>
-                        </div>
-                  )}
-            </div>
+        <div className="container mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
+              {imgUrl && (
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 items-center">
+                      <img src={imgUrl} alt={`${imgUrl}, image`} className="object-contain aspect-square mx-auto" />
+                      <div className="flex-1 items-center">
+                            <h2 className="font-semibold text-2xl text-gray-700 mb-4">{targetProduct.name}</h2>
+                            <p className="">{targetProduct.description}</p>
+                            <div
+                              className="flex justify-between items-center mt-2 border-t-2 border-gray-500 gap-4 pt-4">
+                                  <i className="text-xl"><em><b>${targetProduct.price}</b></em></i>
+                                  <AddToCartBtn productId={targetProduct.id} />
+                            </div>
+                      </div>
+                </div>
+              )}
+        </div>
       )
 }
 

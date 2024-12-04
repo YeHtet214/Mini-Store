@@ -11,7 +11,7 @@ import {useNavigate} from 'react-router-dom';
 import {loadStripe} from "@stripe/stripe-js";
 
 // const BASE_URL = "https://mini-store-server-production.up.railway.app";
-const BASE_URL = "https://mini-store-api-theta.vercel.app/api";
+const BASE_URL = "https://ministore-server.vercel.app/api";
 
 const CheckOut = () => {
       const { checkOutItems } = useCart();
@@ -46,14 +46,16 @@ const CheckOut = () => {
 
       const handleProceedOrder = async () => {
             if (!checkOutItems.length) return;
+            console.log(checkOutItems)
             const newOrder = await OrderServices.createOrderSummary(orderSummary.totalAmount) as Order;
-
+            console.log("New Order: ", newOrder);
             if (newOrder.order_id) {
                   addNewOrder(newOrder);
-                  const newOrderItems = await OrderServices.addOrderItems(newOrder.order_id, checkOutItems) as OrderItemType;
-                  if (!newOrderItems) alert("Something went wrong");
-                  addNewOrderItems(newOrderItems);
-                  await handleCheckOutSession();
+                  const newOrderItems = await OrderServices.addOrderItems(newOrder.order_id, checkOutItems);
+                  newOrderItems.forEach(orderItem =>  addNewOrderItems(orderItem));
+
+                  console.log(newOrderItems);
+                  // await handleCheckOutSession();
                   setIsProcessing(false);
             } else {
                   alert("Something went wrong, please select the product again!")
@@ -68,7 +70,7 @@ const CheckOut = () => {
             const headers = {
                   "Content-Type": "application/json"
             }
-            const response = await axios.post("/api/create-checkout-session", {
+            const response = await axios.post("/create-checkout-session", {
                   headers,
                   body: JSON.stringify(body)
             })
@@ -84,12 +86,31 @@ const CheckOut = () => {
 
       const handleSubmit = async () => {
             // check if address form is properly filled
-            if ( !address.city || !address.country || !address.postcode || !address.country ) {
+            if ( !address.city || !address.address || !address.country || !address.postcode || !address.state ) {
                   return setError(true);
             }
             setIsProcessing(true);
-            const { data } = await axios.post(`${BASE_URL}/orders/address`, { ...address, user_id: currentUser?.user_id });
-            if (data) handleProceedOrder();
+            try {
+                  // Serialize the address object into query parameters
+                  const addressQuery = new URLSearchParams({
+                        city: address.city,
+                        country: address.country,
+                        postcode: address.postcode,
+                        state: address.state,
+                        address: address.address
+                  }).toString();
+
+                  console.log(addressQuery)
+                  const { data } = await axios.post(
+                    `${BASE_URL}/orders?${addressQuery}&userId=${currentUser?.user_id}`
+                  );
+
+                  console.log("Address data returned?: ", data);
+                  await handleProceedOrder();
+            } catch (error) {
+                  console.error("Error submitting order:", error);
+                  setError(true);
+            }
       }
 
       return (

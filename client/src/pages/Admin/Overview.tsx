@@ -33,7 +33,7 @@ const MonthsOfYear = [
 const MetricCard = ({ title, value, change }: { title: string; value: number; change: number }) => (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <p className="text-3xl font-bold mb-2">{value}</p>
+      <p className="text-2xl font-bold mb-2">{value}</p>
       <p className={`flex items-center ${change >= 0 ? 'text-green-500' : 'text-red-500'}`}>
         {change >= 0 ? <ArrowUpIcon className="w-4 h-4 mr-1" /> : <ArrowDownIcon className="w-4 h-4 mr-1" />}
         {Math.abs(change)}% since last week
@@ -60,7 +60,7 @@ interface OrdersProps {
 
 const RecentOrders = ({ orders }: OrdersProps) => {
     return (
-      <div className="bg-white p-4 rounded-lg shadow-md">
+      <div className="">
         <h3 className="text-xl font-semibold mb-4">Recent Orders</h3>
         <div className="overflow-x-auto">
           <table className="min-w-full">
@@ -82,9 +82,9 @@ const RecentOrders = ({ orders }: OrdersProps) => {
                   <td className="px-4 py-2 whitespace-nowrap">{currency.format(order.total_amount)}</td>
                   <td className="px-4 py-2 whitespace-nowrap">
                     <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                      order.status === 'Delivered' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                      order.order_status === 'Delivered' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
                     }`}>
-                      {order.status}
+                      {order.order_status}
                     </span>
                   </td>
                 </tr>
@@ -129,33 +129,28 @@ const SalesOverview = () => {
     }, [users]);
 
     const totalSalesAmount = useMemo(() => {
-        return orders
-                .filter(order => order.status === "Processing")
+        const salesAmount = orders
+                .filter(order => order.order_status === "Processing")
                 .reduce((acc, { total_amount }) => Number(acc) + Number(total_amount), 0);
+        return currency.format(salesAmount);
     }, [orders]);
 
     return (
-        <>
-            <div className="flex min-h-screen">
-                <main className="flex-1">
-                    <h2 className="text-2xl font-semibold mb-6">Overview Pages</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                        <MetricCard title="Total Sales" value={totalSalesAmount} change={2.65} />
-                        <MetricCard title="Customers" value={noOfUsers} change={2.65} />
-                        <MetricCard title="Orders" value={orders.length} change={-1.02} />
-                    </div>
-                    <div className="grid gird-flow-row 2xl:grid-flow-col grid-cols-2 gap-4">
-                        <Chart chartData={chartData}/>
-                        <RecentOrders orders={orders} />
-                    </div>
-                </main>
+        <main>
+            <h2 className="text-2xl font-semibold mb-6">Overview Pages</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <MetricCard title="Total Sales" value={totalSalesAmount} change={+1.82}/>
+                <MetricCard title="Customers" value={noOfUsers} change={2.65}/>
+                <MetricCard title="Orders" value={orders.length} change={-1.02}/>
             </div>
-        </>
+            <div className="flex flex-col lg:flex-row gap-4">
+                <Chart chartData={chartData}/>
+                <RecentOrders orders={orders}/>
+            </div>
+        </main>
     )
 }
 
 export default SalesOverview;
-;
-
 
 

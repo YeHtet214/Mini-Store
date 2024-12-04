@@ -6,7 +6,6 @@ const BASE_URL = "https://ministore-server.vercel.app/api";
 
 export const getCurrentUser = async () => {
       const token = localStorage.getItem('token');
-      console.log("token", token);
 
       const axiosInstance = axios.create({
             headers: {
@@ -16,7 +15,6 @@ export const getCurrentUser = async () => {
 
       try {
             const res = await axiosInstance.get(`${BASE_URL}/userProfile`);
-            console.log("Current User: ", res.data)
             return res.data;
       } catch (error) {
             console.log(error);

@@ -31,10 +31,10 @@ const ProductsList = () => {
       if (isLoading) return <LoadingDots />
 
       return (
-          <div>
+          <div className="container mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
                 {/*<h1 className="text-3xl font-bold mb-8 text-center">Our Products</h1>*/}
                 <div className="bg-white shadow-sm sticky top-0 z-10">
-                      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                      <div className=" mx-auto mb-8">
                             <div className="relative">
                                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                         <MagnifyingGlassIcon className="h-5 w-5 text-gray-400"/>
@@ -49,7 +49,7 @@ const ProductsList = () => {
                             </div>
                       </div>
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                       {filteredProducts?.map((product) => (
                           <ProductCard key={product.id} product={product}/>
                       ))}

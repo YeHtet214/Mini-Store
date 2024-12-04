@@ -20,20 +20,10 @@ const ProductCard = ({ product }: Props) => {
       }, []);
 
       return (
-            // <Link to={`/products/${id}/detail`} >
-            //       <div className="shadow-md p-4 border-r-2 cursor-pointer">
-            //             <div className="flex flex-col justify-between h-full">
-            //                   <img src={productImg} alt="" className="h-48 mx-auto object-contain" />
-            //                   <h5 className="my-2 flex-1">{name}</h5>
-            //                   <AddToCartBtn productId={id} />
-            //             </div>
-            //       </div>
-            // </Link>
-
           <Link to={`/products/${id}/detail`}>
                 <div
                     key={product.id}
-                    className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+                    className="bg-white rounded shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden p-4"
                     onMouseEnter={() => setHoveredProduct(product.id)}
                     onMouseLeave={() => setHoveredProduct(null)}
                 >
@@ -41,7 +31,7 @@ const ProductCard = ({ product }: Props) => {
                             <img
                                 src={productImg}
                                 alt={name}
-                                className="w-full h-64 object-contain"
+                                className="aspect-square object-contain"
                             />
                             {hoveredProduct === id && (
                                 <div className="absolute top-4 right-4 space-y-2">
@@ -58,17 +48,17 @@ const ProductCard = ({ product }: Props) => {
                   </span>
                             </div>
                       </div>
-                      <div className="p-6">
+                      <div>
                             <div className="flex items-center justify-between mb-2">
-                                  <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                                  <h3 className=" text-gray-900 line-clamp-1">
                                         {name}
                                   </h3>
                                   <div className="flex items-center">
-                                        <StarIcon className="h-5 w-5 text-yellow-400 fill-current"/>
-                                        <span className="ml-1 text-sm text-gray-600">{product.rating}</span>
+                                        <StarIcon className="h-3 w-5 text-yellow-400 fill-current"/>
+                                        <span className="ml-1 text-gray-600">{product.rating}</span>
                                   </div>
                             </div>
-                            <p className="text-2xl font-bold text-gray-900 mb-4">
+                            <p className="text-xl font-bold text-gray-900 mb-4">
                                   {currency.format(product.price)}
                             </p>
                             <AddToCartBtn productId={id}/>

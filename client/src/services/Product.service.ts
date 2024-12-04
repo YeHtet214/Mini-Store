@@ -11,7 +11,6 @@ export const getAllProductsList = async () => {
             if (!response.data) {
                   console.log("Something went wrong while fetching products!");
             }
-            console.log(response.data, "product list");
             return response.data as Product[];
       } catch (error) {
             console.log(error);

@@ -16,12 +16,13 @@ import SalesOverview from "./pages/Admin/Overview";
 import ProfileRoute from "./routes/ProfileRoute";
 import Success from "./pages/success.tsx";
 import Cancel from "./pages/Cancel.tsx";
+import Footer from "./components/Footer.tsx";
 
 const App = () => {
       return (
             <>
                   <Header />
-                  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4" >
+                  <div className="min-h-screen">
                         <Routes>
                               <Route path="/auth/profile" element={<ProfileRoute />} >
                                     <Route index element={<Profile />} />
@@ -45,6 +46,7 @@ const App = () => {
                               <Route path="*" element={<p>There's NOTHING here! 404.</p>} />
                         </Routes>
                   </div>
+                  <Footer />
             </>
       )
 }

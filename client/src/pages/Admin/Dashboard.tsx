@@ -8,20 +8,19 @@ const Dashboard = () => {
     useEffect(() => {
         const currentPath = pathname.split("/").pop();
         setPath(currentPath);
-        console.log(path, currentPath);
     }, [pathname])
 
     return (
-        <div className="flex">
-             <div className="w-64 h-screen bg-gray-100 p-4">
-                <nav className="space-y-2">
-                    <Link to="/admin/dashboard" className={`${(path === "dashboard") && "text-white bg-blue-500"} block py-2 px-4 hover:bg-gray-200 rounded`}>Overview</Link>
-                    <Link to="/admin/dashboard/products" className={`${path === "products" && "text-white bg-blue-500"} block py-2 px-4 hover:bg-gray-200 rounded`}>ManageProducts</Link>
-                    <Link to="/admin/dashboard/orders" className={`${path === "orders" && "text-white bg-blue-500"} block py-2 px-4 hover:bg-gray-200 rounded`}>ManageOrders</Link>
-                    <Link to="/admin/dashboard/users" className={`${path === "users" && "text-white bg-blue-500"} block py-2 px-4 hover:bg-gray-200 rounded`}>ManageUsers</Link>
+        <div className="flex flex-col md:flex-row h-screen  gap-4">
+             <div className="bg-gray-100">
+                <nav className="flex items-center justify-between md:flex-col text-left md:w-52">
+                    <Link to="/admin/dashboard" className={`${(path === "dashboard") && "text-white bg-indigo-500"} block py-2 px-4 hover:bg-indigo-200 rounded w-full`}>Overview</Link>
+                    <Link to="/admin/dashboard/products" className={`${path === "products" && "text-white bg-indigo-500"} block py-2 px-4 hover:bg-indigo-200 rounded w-full`}>Products</Link>
+                    <Link to="/admin/dashboard/orders" className={`${path === "orders" && "text-white bg-indigo-500"} block py-2 px-4 hover:bg-indigo-200 rounded w-full`}>Orders</Link>
+                    <Link to="/admin/dashboard/users" className={`${path === "users" && "text-white bg-indigo-500"} block py-2 px-4 hover:bg-indigo-200 rounded w-full`}>Users</Link>
                 </nav>
             </div>
-            <section className="flex-1 container mx-auto py-8 px-4 flex gap-8">
+            <section className="flex-1 container p-4 overflow-scroll">
                 <Outlet />
             </section>
         </div>

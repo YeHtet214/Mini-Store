@@ -35,7 +35,6 @@ const UserProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       });
 
       useEffect(() => {
-            console.log("Is logged inn: ", isLoggedIn)
             if (isLoggedIn) {
                   UserService.getCurrentUser().then((data: User) => setCurrentUser(data));
                   UserService.getAllUsers().then((data: User[]) => setUsers(data));

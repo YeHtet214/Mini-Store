@@ -30,7 +30,6 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     useEffect(() => {
         const getAllOrders = async () => {
             const allOrders = await OrderServices.getAllOrders() as Order[];
-            console.log(allOrders);
             if (allOrders) setOrders(allOrders.sort((a, b) => a.order_id - b.order_id));
         }
         
@@ -62,6 +61,8 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     }
 
     const addNewOrderItems = (newItem: OrderItemType) => {
+        console.log(newItem);
+        console.log(orderItems)
         setOrderItems(items => [...items, newItem]);
     }
 

@@ -17,29 +17,40 @@ interface orderItemsTableProps {
     items: OrderItemType[] | null;
 }
 
-const OrderItemsTable = ({ items }: orderItemsTableProps ) => {
-
-    return (
-      <div className="bg-gray-100">
-        <div className="p-4 grid grid-cols-5 mb-4 border-b-2 border-gray-200 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-          <p>Order Item Id</p>
-          <p>Name</p>
-          <p>Price</p>
-          <p>Quantity</p>
-          <p>Sub Total</p>
-        </div>
-        { items?.map(item => (
-          <div key={item.order_item_id} className="grid grid-cols-5 text-sm" >
-              <p className="inline-block mx-4">{item.order_item_id}</p>
-              <p className="max-w-80 mr-4 inline-block">{item.name}</p>
-              <p>{item.price}</p>
-              <p>{item.quantity}</p>
-              <p>{currency.format(item.sub_total)}</p>
-          </div>
-        ))}
+const ConfirmModel = ({ onDelete, onCancel }) => (
+  <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-100/50">
+    <div className="bg-white p-8">
+      <h1>Are you sure to delete the order</h1>
+      <div className="flex items-center justify-center gap-4 mt-4 transition ease-in-out">
+        <button className="py-1 px-4 border-indigo-500 border-2 rounded focus:scale-95" onClick={onCancel}>Cancel</button>
+        <button className="py-1 px-4 border-red-500 bg-red-500 text-white border-2 rounded focus:scale-95" onClick={onDelete}>Ok</button>
       </div>
-    )
-}
+    </div>
+  </div>
+);
+
+const OrderItemsTable = ({ items }: orderItemsTableProps) => {
+  return (
+    <div className="bg-gray-100">
+      <div className="mb-4 grid grid-cols-5 border-b-2 border-gray-200 p-4 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+        <p>Order Item Id</p>
+        <p>Name</p>
+        <p>Price</p>
+        <p>Quantity</p>
+        <p>Sub Total</p>
+      </div>
+      {items?.map((item) => (
+        <div key={item.order_item_id} className="grid grid-cols-5 text-sm">
+          <p className="mx-4 inline-block">{item.order_item_id}</p>
+          <p className="mr-4 inline-block max-w-80">{item.name}</p>
+          <p>{item.price}</p>
+          <p>{item.quantity}</p>
+          <p>{currency.format(item.sub_total)}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const ManageOrders = () => {
     const {orders, orderItems, deleteOrder} = UseOrders();
@@ -85,10 +96,13 @@ const ManageOrders = () => {
         ))
     }
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number | undefined) => {
+        if (!id) return;
         // setOrdersList(orders.filter(order => order.order_id !== id))
+        console.log("Delete order Id: ", id);
         const deletedOrder = await OrderServices.deleteOrder(id)
         if (deletedOrder) deleteOrder(id)
+        handleCloseModal()
 
     }
 
@@ -104,8 +118,13 @@ const ManageOrders = () => {
         setSelectedOrderId(id)
     }
 
+    const handleCloseModal = () => {
+        setOpenModal(false);
+        setSelectedOrderId(0);
+    }
+
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div>
             <h1 className="text-2xl font-bold mb-6">Manage Orders</h1>
 
             <div className="mb-4 flex items-center">
@@ -163,8 +182,8 @@ const ManageOrders = () => {
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <span
-                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.status]}`}>
-                            {order.status}
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order["order_status"]]}`}>
+                            {order.order_status}
                             </span>
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -181,7 +200,7 @@ const ManageOrders = () => {
                                         </button>
                                         <button
                                             className="text-red-600 hover:text-red-900"
-                                            onClick={() => handleDelete(order.order_id)}
+                                          onClick={() => handleOrderDetailView(order.order_id)}
                                         >
                                             <Trash2 size={18}/>
                                         </button>
@@ -233,6 +252,8 @@ const ManageOrders = () => {
                     </button>
                 </div>
             </div>
+
+            { openModal && <ConfirmModel onDelete={() => handleDelete(selectedOrderId)} onCancel={() => handleCloseModal() } /> }
         </div>
     )
 }

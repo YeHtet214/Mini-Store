@@ -65,7 +65,7 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="John Doe"
-                required={type === "create" ? true : false}
+                required={type === "create"}
               />
             </div>
             <div>
@@ -78,9 +78,9 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
                 name="email"
                 value={userData.email}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="john@example.com"
-                required={type === "create" ? true : false}
+                required={type === "create"}
               />
             </div>
               { type === "create" && (
@@ -96,7 +96,7 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
                           onChange={handleChange}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                           placeholder="••••••••"
-                          required={type === "create" ? true : false}
+                          required={type === "create"}
                       />
                   </div>
               )}
@@ -109,8 +109,8 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
                       name="role"
                       value={userData.role}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      required={type === "create" ? true : false}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                      required={type === "create"}
                   >
                       <option value="admin">Admin</option>
                       <option value="user">User</option>
@@ -126,7 +126,7 @@ const InputUserForm = ({ type, closeModal, handleUserAction, user }: InputUserFo
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 { type === "create" ? "Add User" : "Update"}
               </button>
@@ -174,7 +174,7 @@ const ManageUsers = () => {
         }
     }
 
-    const hanldeUserDelete = async (user_id: number | undefined) => {
+    const handleUserDelete = async (user_id: number | undefined) => {
         if (!user_id) return;
         await UserServices.deleteUser(user_id);
         deleteUser(user_id);
@@ -196,7 +196,7 @@ const ManageUsers = () => {
     })
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div>
             <h1 className="text-2xl font-bold mb-6">User Management</h1>
             <div className="flex gap-4">
                 <div className="relative flex-grow">
@@ -211,7 +211,7 @@ const ManageUsers = () => {
                 </div>
                 <button
                     onClick={() => openModal("create")}
-                    className="flex-end bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-6 rounded inline-flex items-center"
+                    className="flex-end bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 mb-6 rounded inline-flex items-center"
                 >
                     <PlusIcon className="w-4 h-4 mr-2" />
                     Add User
@@ -256,7 +256,7 @@ const ManageUsers = () => {
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                 <button
                                     onClick={() => openModal("update", user.user_id)}
-                                    className="text-blue-600 hover:text-blue-900 mr-3"
+                                    className="text-indigo-600 hover:text-indigo-900 mr-3"
                                 >
                                     <PencilIcon className="w-5 h-5" />
                                 </button>
@@ -264,7 +264,7 @@ const ManageUsers = () => {
                                 
                                 { user.email !== "yhtet1934@gmail.com" && ( /* To avoid deleting all the users, which make impossible to login again into admin dashboard */
                                     <button 
-                                        onClick={() => hanldeUserDelete(Number(user.user_id))} 
+                                        onClick={() => handleUserDelete(Number(user.user_id))}
                                         className="text-red-600 hover:text-red-900"
                                     >
                                         <TrashIcon className="w-5 h-5" />

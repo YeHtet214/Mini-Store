@@ -114,7 +114,7 @@ const InputProductForm = ({ type, close, handleProductSubmit, product }: InputPr
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="1324"
-              required={type === "Create" ? true : false}
+              required={type === "Create"}
             />
           </div>
           <div>
@@ -128,7 +128,7 @@ const InputProductForm = ({ type, close, handleProductSubmit, product }: InputPr
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="1324"
-              required={type === "Create" ? true : false}
+              required={type === "Create"}
             />
           </div>
           <div className="flex justify-end mt-6">
@@ -141,7 +141,7 @@ const InputProductForm = ({ type, close, handleProductSubmit, product }: InputPr
             </button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               { type === "Create" ? "Add Product" : "Update"}
             </button>
@@ -239,20 +239,20 @@ const handleUpdateProduct = async (data: Product) => {
   if (error) return <h1 className="absolute z-10 bg-white top-10 left-10 p-10 shadow-md">{error}</h1>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div>
         <h1 className="text-2xl font-bold mb-6">Product Management</h1>
-        <div className="flex gap-4">
-          <select name="sort" className="h-10 cursor-pointer border rounded-lg px-2" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
+        <div className="grid grid-cols-4 gap-4">
+          <select name="sort" className="col-span-4 md:col-span-1 h-10 cursor-pointer border rounded-lg px-2 text-md" value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
             <option value="name">Name</option>
             <option value="category">Category</option>
             <option value="id">Id</option>
             <option value="price">Price</option>
           </select>
-            <div className="relative flex-grow">
+            <div className="relative col-span-3 md:col-span-2">
                 <input
                 type="text"
                 placeholder="Search orders..."
-                className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                className="pl-10 pr-4 py-2 border rounded-lg w-full focus:border-indigo-700 focus:border-2 outline-none"
                 value={searchTerm}
                 onChange={(e) => handleFilter(e.target.value)}
                 />
@@ -260,10 +260,10 @@ const handleUpdateProduct = async (data: Product) => {
             </div>
             <button
                 onClick={() => openModal("Create")}
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mb-6 rounded inline-flex items-center"
+                className="col-span-1 md:col-span-1 bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 mb-6 rounded inline-flex items-center"
             >
               <PlusIcon className="w-4 h-4 mr-2" />
-              Add Product
+              Add&nbsp; <span className="hidden md:block">Product</span>
           </button>
         </div>
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -317,7 +317,7 @@ const handleUpdateProduct = async (data: Product) => {
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <button
                     onClick={() => openModal("Update", product.id)}
-                    className="text-blue-600 hover:text-blue-900 mr-3"
+                    className="text-indigo-600 hover:text-blue-900 mr-3"
                   >
                     <PencilIcon className="w-5 h-5" />
                   </button>

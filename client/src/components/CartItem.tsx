@@ -60,8 +60,7 @@ const CartItem = ({ item, setItemList }: CartItemProps) => {
                         return [...uniqueArr, item]; // make sure to remove the same item if it's cached 
                   }) :
                   setItemList(prevItems => {
-                        const updateCheckOutItems = prevItems.filter(existingItem => existingItem.id !== item.id)
-                        return updateCheckOutItems;
+                        return prevItems.filter(existingItem => existingItem.id !== item.id)
                   });
       }
 

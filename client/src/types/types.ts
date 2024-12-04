@@ -26,7 +26,7 @@ export interface Order {
       order_date: Date;
       user_id: number;
       payment_method: string;
-      status: 'Pending' | 'Processing' | 'Cancelled' | 'Delivered';
+      order_status: 'Pending' | 'Processing' | 'Cancelled' | 'Delivered';
       address: string;
       name?: string;
       total_amount: number;

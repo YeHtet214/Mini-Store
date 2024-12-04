@@ -6,7 +6,11 @@ import { Order, OrderItemType } from "../../types/types";
 import { Search, ChevronLeft, ChevronRight, Eye, Trash2, RefreshCw } from 'lucide-react'
 import { currency } from "../../helper/helper";
 
-const statusColors = {
+interface statusColorsProps {
+  [key: string]: string;
+}
+
+const statusColors: statusColorsProps = {
   Pending: 'bg-yellow-100 text-yellow-800',
   Processing: 'bg-blue-100 text-blue-800',
   Delivered: 'bg-green-100 text-green-800',
@@ -17,7 +21,12 @@ interface orderItemsTableProps {
     items: OrderItemType[] | null;
 }
 
-const ConfirmModel = ({ onDelete, onCancel }) => (
+interface ConfirmModelProps {
+  onDelete: () => void;
+  onCancel: () => void;
+}
+
+const ConfirmModel = ({ onDelete, onCancel }: ConfirmModelProps) => (
   <div className="absolute left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-gray-100/50">
     <div className="bg-white p-8">
       <h1>Are you sure to delete the order</h1>
@@ -90,7 +99,7 @@ const ManageOrders = () => {
         setCurrentPage(1)
     }
 
-    const handleStatusUpdate = (id: number, newStatus: Order['status']) => {
+    const handleStatusUpdate = (id: number, newStatus: Order['order_status']) => {
         setCurrentOrders(orders.map(order =>
             order.order_id === id ? {...order, status: newStatus} : order
         ))
@@ -182,7 +191,7 @@ const ManageOrders = () => {
                                 </td>
                                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                             <span
-                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order["order_status"]]}`}>
+                                className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColors[order.order_status]}`}>
                             {order.order_status}
                             </span>
                                 </td>

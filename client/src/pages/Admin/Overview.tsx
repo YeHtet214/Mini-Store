@@ -139,7 +139,7 @@ const SalesOverview = () => {
         <main>
             <h2 className="text-2xl font-semibold mb-6">Overview Pages</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <MetricCard title="Total Sales" value={totalSalesAmount} change={+1.82}/>
+                <MetricCard title="Total Sales" value={parseInt(totalSalesAmount)} change={+1.82}/>
                 <MetricCard title="Customers" value={noOfUsers} change={2.65}/>
                 <MetricCard title="Orders" value={orders.length} change={-1.02}/>
             </div>

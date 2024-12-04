@@ -31,7 +31,7 @@ const OrdersTable = () => {
                                 <td>{order.user_id}</td>
                                 <td>{String(order.order_date)}</td>
                                 <td>{order.total_amount}</td>
-                                <td>{order.status}</td>
+                                <td>{order.order_status}</td>
                             </tr>
                             <React.Fragment>
                                 { expandedOrder === order.order_id && (

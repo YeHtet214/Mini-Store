@@ -61,8 +61,6 @@ const OrderContextProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     }
 
     const addNewOrderItems = (newItem: OrderItemType) => {
-        console.log(newItem);
-        console.log(orderItems)
         setOrderItems(items => [...items, newItem]);
     }
 

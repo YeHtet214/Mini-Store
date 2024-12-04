@@ -2,15 +2,14 @@ import {CreditCard, Truck, ChevronLeft, CheckCircle, AlertCircle} from 'lucide-r
 import { ChangeEvent, useEffect, useState } from "react";
 import { useCart } from "../context/CartContextProvider"
 import * as OrderServices from "../services/Order.service";
-import {Order, OrderItemType} from "../types/types";
+import { Order, OrderItemType } from "../types/types";
 import { UseOrders } from "../context/OrderContextProvider";
 import { currency } from '../helper/helper';
 import axios from 'axios';
 import { useUser } from '../context/UserContextProvider';
 import {useNavigate} from 'react-router-dom';
-import {loadStripe} from "@stripe/stripe-js";
+// import {loadStripe} from "@stripe/stripe-js";
 
-// const BASE_URL = "https://mini-store-server-production.up.railway.app";
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
 const CheckOut = () => {
@@ -51,10 +50,9 @@ const CheckOut = () => {
             console.log("New Order: ", newOrder);
             if (newOrder.order_id) {
                   addNewOrder(newOrder);
-                  const newOrderItems = await OrderServices.addOrderItems(newOrder.order_id, checkOutItems);
+                  const newOrderItems = await OrderServices.addOrderItems(newOrder.order_id, checkOutItems) as OrderItemType[];
                   newOrderItems.forEach(orderItem =>  addNewOrderItems(orderItem));
 
-                  console.log(newOrderItems);
                   // await handleCheckOutSession();
                   setIsProcessing(false);
             } else {
@@ -62,27 +60,27 @@ const CheckOut = () => {
             }
       }
 
-      const handleCheckOutSession = async () => {
-            const stripe = await loadStripe("pk_live_51KUBqGEWeizE607MnNqxaCZYCD11Qd1xVpYH2B7tuTP5lxS0aBHPlZS2e2FkQGtod2fbgaHoqd8FL1SFQvUOcrDx00FqfjK4S3");
-            const body = {
-                  products: checkOutItems
-            }
-            const headers = {
-                  "Content-Type": "application/json"
-            }
-            const response = await axios.post("/create-checkout-session", {
-                  headers,
-                  body: JSON.stringify(body)
-            })
-
-            const session = response.data;
-
-            const result = stripe?.redirectToCheckout({
-                  sessionId: session.id
-            });
-
-            console.log(result);
-      }
+      // const handleCheckOutSession = async () => {
+      //       const stripe = await loadStripe("pk_live_51KUBqGEWeizE607MnNqxaCZYCD11Qd1xVpYH2B7tuTP5lxS0aBHPlZS2e2FkQGtod2fbgaHoqd8FL1SFQvUOcrDx00FqfjK4S3");
+      //       const body = {
+      //             products: checkOutItems
+      //       }
+      //       const headers = {
+      //             "Content-Type": "application/json"
+      //       }
+      //       const response = await axios.post("/create-checkout-session", {
+      //             headers,
+      //             body: JSON.stringify(body)
+      //       })
+      //
+      //       const session = response.data;
+      //
+      //       const result = stripe?.redirectToCheckout({
+      //             sessionId: session.id
+      //       });
+      //
+      //       console.log(result);
+      // }
 
       const handleSubmit = async () => {
             // check if address form is properly filled

@@ -26,7 +26,7 @@ const Header = () => {
 
       return (
             <header className="container mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
-                  <div className="flex justify-between py-4 mb-4 border-b-2">
+                  <div className="flex justify-between py-4 px-2 mb-4 border-b-2">
                         <Link to="/" className="flex-grow flex items-center">
                               <svg className="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />

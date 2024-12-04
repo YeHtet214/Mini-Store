@@ -20,9 +20,9 @@ import Footer from "./components/Footer.tsx";
 
 const App = () => {
       return (
-            <>
+            <div className="bg-gray-100">
                   <Header />
-                  <div className="min-h-screen">
+                  <div className="min-h-screen bg-gray-100">
                         <Routes>
                               <Route path="/auth/profile" element={<ProfileRoute />} >
                                     <Route index element={<Profile />} />
@@ -47,7 +47,7 @@ const App = () => {
                         </Routes>
                   </div>
                   <Footer />
-            </>
+            </div>
       )
 }
 

@@ -22,9 +22,9 @@ const ProductDetails = () => {
       if (!targetProduct) return <h1>Target Product Not Exist!</h1>
 
       return (
-        <div className="container mx-auto px-4 md:px-10 lg:px-16 xl:px-24">
+        <div className="container mx-auto px-4 py-6 md:px-10 lg:px-16 xl:px-24">
               {imgUrl && (
-                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 items-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-6 items-center bg-white p-4 rounded-md shadow-sm">
                       <img src={imgUrl} alt={`${imgUrl}, image`} className="object-contain aspect-square mx-auto" />
                       <div className="flex-1 items-center">
                             <h2 className="font-semibold text-2xl text-gray-700 mb-4">{targetProduct.name}</h2>

@@ -40,7 +40,7 @@ const AddToCartBtn = ({ productId }: Props) => {
           <button
               onClick={handleCartUpdate}
               disabled={isLoading}
-              className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-300 flex items-center justify-center">
+              className="w-full bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center justify-center">
                 <ShoppingCartIcon className="h-5 w-5 mr-2"/>
                 <span>Add</span>
           </button>

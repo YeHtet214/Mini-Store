@@ -5,6 +5,7 @@ import * as UserService from "../services/User.service";
 interface UserContextType {
       currentUser: User | undefined;
       setCurrentUser: Dispatch<SetStateAction<User | undefined>>;
+      updateLoginStatus: (status: boolean) => void;
       users: User[] | [];
       isLoggedIn: boolean;
       setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
@@ -16,6 +17,7 @@ interface UserContextType {
 const defaultUserContext: UserContextType = {
       currentUser: undefined,
       setCurrentUser: () => {},
+      updateLoginStatus: () => {},
       users: [],
       isLoggedIn: false,
       setIsLoggedIn: () => {},
@@ -41,6 +43,8 @@ const UserProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
             }
       }, [isLoggedIn]);
 
+      const updateLoginStatus = (status: boolean) => setIsLoggedIn(status);
+
       const addUser = (user: User) => {
             setUsers(prev => [...prev, user]);
       }
@@ -57,7 +61,7 @@ const UserProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
       }
 
       return (
-            <UserContext.Provider value={{ currentUser, setCurrentUser, users, addUser, deleteUser, updateUser, isLoggedIn, setIsLoggedIn }}>
+            <UserContext.Provider value={{ currentUser, setCurrentUser, updateLoginStatus, users, addUser, deleteUser, updateUser, isLoggedIn, setIsLoggedIn }}>
                   {children}
             </UserContext.Provider>
       )

@@ -1,4 +1,4 @@
-import {CreditCard, Truck, ChevronLeft, CheckCircle, AlertCircle} from 'lucide-react'
+import { CreditCard, Truck, ChevronLeft, CheckCircle, AlertCircle, CircleCheckBig } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useCart } from "../context/CartContextProvider"
 import * as OrderServices from "../services/Order.service";
@@ -12,6 +12,19 @@ import {useNavigate} from 'react-router-dom';
 
 const BASE_URL = "https://ministore-server.vercel.app/api";
 
+const SuccessRedirectModel = () => {
+      const navigate = useNavigate();
+      useEffect(() => {
+            setTimeout(() => navigate("/"), 3000);
+      }, []);
+
+     return (
+       <div className="w-1/2 mx-auto mt-1/2">
+             <h1>Order Successful! Thank You <CircleCheckBig color="#098500" /></h1>
+       </div>
+     )
+}
+
 const CheckOut = () => {
       const { checkOutItems } = useCart();
       const { addNewOrder, addNewOrderItems } = UseOrders();
@@ -19,6 +32,7 @@ const CheckOut = () => {
       const navigate = useNavigate();
       const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'card' | 'paypal'>('card')
       const [isProcessing, setIsProcessing] = useState(false)
+      const [success, setSuccess] = useState(false);
       const [orderSummary, setOrderSummary] = useState({ subTotal: 0, totalAmount: 0 });
       const [address, setAddress] = useState({ address: "", city: "", state: "", postcode: "", country: "" });
       const [error, setError] = useState(false);
@@ -54,7 +68,6 @@ const CheckOut = () => {
                   newOrderItems.forEach(orderItem =>  addNewOrderItems(orderItem));
 
                   // await handleCheckOutSession();
-                  setIsProcessing(false);
             } else {
                   alert("Something went wrong, please select the product again!")
             }
@@ -108,8 +121,13 @@ const CheckOut = () => {
             } catch (error) {
                   console.error("Error submitting order:", error);
                   setError(true);
+            } finally {
+                  setIsProcessing(false);
+                  setSuccess(true);
             }
       }
+
+      if (success) return <SuccessRedirectModel />;
 
       return (
             <div className="min-h-screen bg-gray-100 py-8">

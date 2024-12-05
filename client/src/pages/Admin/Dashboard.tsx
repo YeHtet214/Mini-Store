@@ -13,23 +13,23 @@ const Dashboard = () => {
 
     return (
         <div className="flex flex-col md:flex-row h-screen gap-4">
-             <div className="bg-white rounded-r-md shadow-lg">
+             <div className="bg-white rounded-r-md shadow-lg sticky top-0 md:relative">
                 <nav className="flex items-center justify-between md:flex-col text-left md:w-52">
-                    <Link to="/admin/dashboard" className={`${(path === "dashboard") && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full border-b-2 flex items-center justify-between`}>
+                    <Link to="/admin/dashboard" className={`${(path === "dashboard") && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full md:border-b-2 flex items-center justify-between`}>
                       <span>Overview</span>
-                      <FolderKanban />
+                      <FolderKanban className="hidden md:block" />
                     </Link>
-                    <Link to="/admin/dashboard/products" className={`${path === "products" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full border-b-2 flex items-center justify-between`}>
+                    <Link to="/admin/dashboard/products" className={`${path === "products" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full md:border-b-2 flex items-center justify-between`}>
                       <span>Products</span>
-                      <PackageSearch />
+                      <PackageSearch className="hidden md:block" />
                     </Link>
-                    <Link to="/admin/dashboard/orders" className={`${path === "orders" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full border-b-2 flex items-center justify-between`}>
+                    <Link to="/admin/dashboard/orders" className={`${path === "orders" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full md:border-b-2 flex items-center justify-between`}>
                       <span>Orders</span>
-                      <ShoppingBasket />
+                      <ShoppingBasket className="hidden md:block"/>
                     </Link>
-                    <Link to="/admin/dashboard/users" className={`${path === "users" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full border-b-2 flex items-center justify-between`}>
+                    <Link to="/admin/dashboard/users" className={`${path === "users" && "text-white bg-indigo-500"} block py-4 px-4 hover:bg-indigo-300 hover:text-white rounded w-full md:border-b-2 flex items-center justify-between`}>
                       <span>Users</span>
-                      <UserCog />
+                      <UserCog className="hidden md:block"/>
                     </Link>
                 </nav>
             </div>

@@ -4,11 +4,13 @@ import * as UserServices from "../services/User.service";
 import { useUser } from "../context/UserContextProvider";
 import { AuthResponse, userInfo } from "../types/types";
 import { AlertCircle, Lock, Mail } from "lucide-react";
+import LoadingDots from "./LoadingDots.tsx";
 
 const Form = () => {
       const [userInput, setUserInput] = useState<userInfo>({ name: '', email: '', password: ''});
       const [error, setError] = useState<string>('');
-      const { setIsLoggedIn } = useUser();
+      const [isLoading, setIsLoading] = useState(false);
+      const { updateLoginStatus } = useUser();
       const navigate = useNavigate();
 
       const handleResponse = (response: AuthResponse): boolean => {
@@ -24,12 +26,18 @@ const Form = () => {
 
       const handleSubmit = async (e: FormEvent) => {
             e.preventDefault();
-
-            const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
-            if (isAuthenticate) {
-                  setIsLoggedIn(true);
-                  // UserServices.getCurrentUser().then(data => setCurrentUser(data));
-                  navigate('/');
+            setIsLoading(true);
+            try {
+                  const isAuthenticate = await UserServices.authenticateUser({userInput, handleResponse});
+                  if (isAuthenticate) {
+                        updateLoginStatus(true);
+                        navigate('/');
+                        // UserServices.getCurrentUser().then(data => setCurrentUser(data));
+                  }
+            } catch (err) {
+                  console.log(err)
+            } finally {
+                  setIsLoading(false);
             }
       }
 
@@ -37,6 +45,8 @@ const Form = () => {
             const { name, value } = e.target;
             setUserInput(prev => ({ ...prev, [name]: value }));
       }
+
+      if (isLoading) return <LoadingDots />;
 
       return (
             <form className="space-y-6" onSubmit={handleSubmit}>
